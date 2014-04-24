@@ -110,7 +110,8 @@
 
     <!-- Need to add for bubbles -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="bubbles.js"></script>
+    <!-- <script src="bubbles.js"></script> -->
+    <script src="fisheye.js"></script>
     <!-- Need to add for bubbles -->
 
     <script>
@@ -125,7 +126,8 @@
         $(function(){
             player.initPopup($("#playerBox_container"));
             
-            Bubble.init($(".gallery"));
+            Fisheye.init($(".gallery"));
+            // Bubble.init($(".gallery"));
             //Example.init($(".gallery"));
         });
     </script>
