@@ -16,8 +16,6 @@
     
     // Triggered when we are done fetching data
     onDataDone: function(data){
-        console.log('bubble on data done');
-        console.log(data);
         Bubble.drawBubbles(data.slice(0,20));
     },
     
@@ -66,7 +64,6 @@
     },
 
     drawBubbles : function (data){
-        console.log('darwbubbles function');
 
         var width = 960,
             height = 500,
@@ -77,11 +74,11 @@
             .attr("width", width)
             .attr("height", height);
 
-        var center = svg.append("circle")
-        .attr('cx', width/2)
-        .attr('cy', height/2)
-        .attr('r', centerRadius)
-        .attr('fill', 'black');
+        // var center = svg.append("circle")
+        // .attr('cx', width/2)
+        // .attr('cy', height/2)
+        // .attr('r', centerRadius)
+        // .attr('fill', 'black');
 
         //inject a first element that all nodes will link to
         data.unshift({});
@@ -94,14 +91,34 @@
             .size([width, height]);
         
         var centralLinks = [];
+        var centralLinksDistances = [];
         for (var i = 1 ; i < data.length ; i++){
-          centralLinks.push({source: data[0], target: data[i]});
+          centralLinks.push({source: data[0], target: data[i], distance: centerRadius});
+          centralLinksDistances.push(centerRadius*2);
         }
+
+        var contentLinks = [];
+        var contentLinksDistances = [];
+        for (var i = 1 ; i < data.length ; i++){
+          for (var j = 1 ; j < data.length ; j++){
+            contentLinks.push({source: data[i], target: data[j]});
+            contentLinksDistances.push(120);
+          }
+        }
+
+       
+       // consol.log(centralLinksDistances.concat(contentLinksDistances))
 
         // start should be called again whenever the nodes and links change again
         force.nodes(data)
-            .links(centralLinks)
-            .linkDistance(centerRadius*2)
+            .links(centralLinks.concat(contentLinks))
+            .linkDistance(function(link, index){
+                if (link.source.index === 0) {
+                  return centerRadius *4;
+                } else {
+                  return thumbr *4;
+                }
+            })
             .linkStrength(0.3)
             .start();
 
@@ -116,6 +133,8 @@
             .enter().append("g")
             .attr("class", "node")
             .call(force.drag);
+
+          console.log('nodes', node);
 
           node.append("image")
               .attr("xlink:href", function(d) { return d.thumb; })
@@ -142,11 +161,13 @@
                 .attr("x2", function(d) { return d.target.x; })
                 .attr("y2", function(d) { return d.target.y; });
 
+
             node.attr("cx", function(d) { 
               if (d.index === 0 ){
                 return d.x = (width/2);
               }
             });
+
 
             node.attr("cy", function(d) { 
               if (d.index === 0 ){
@@ -154,30 +175,8 @@
               }
             });
 
-            // node.attr("cy", function(d) { 
-            //   if (d.y < height/2){
-            //     return d.y = Math.min(height/2 - centerRadius , d.y);
-            //   } else {
-            //     return d.y = Math.max(height/2 + centerRadius , d.y);
-            //   }
-            // });
 
 
-            // node.attr("cx", function(d) { 
-            //   if (d.x < width/2){
-            //     return d.x = Math.min(width/2 - centerRadius , d.x);
-            //   } else {
-            //     return d.x = Math.max(width/2 + centerRadius , d.x);
-            //   }
-            // })
-
-            // node.attr("cy", function(d) { 
-            //   if (d.y < height/2){
-            //     return d.y = Math.min(height/2 - centerRadius , d.y);
-            //   } else {
-            //     return d.y = Math.max(height/2 + centerRadius , d.y);
-            //   }
-            // });
 
 
             node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
