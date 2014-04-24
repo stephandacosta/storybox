@@ -1,3 +1,5 @@
+console.log('fisheye incorporated');
+
 var Fisheye = {
    $container: $("body"),
 
@@ -18,7 +20,7 @@ var Fisheye = {
    onDataDone: function(data){
        console.log('fisheye on data done');
        console.log(data);
-       Fsheye.drawMosaic(data.slice(0,20));
+       Fisheye.drawMosaic(data.slice(0,20));
    },
 
    playIfShared: function(item){
@@ -67,60 +69,64 @@ var Fisheye = {
 
    drawMosaic : function (data){
 
+console.log("mosaic");
+
        var width = 960,
            height = 500,
-          thumbr = 80,
-          // centerRadius = Math.min(width/2-thumbr, height/2-thumbr);
+          thumbr = 80;
+
 
        var svg = d3.select("body").append("svg")
            .attr("width", width)
-           .attr("height", height);
+           .attr("height", height)
+           .attr("class", "canvas");
 
+       var images = svg.selectAll(".vgimg")
+            .data(data)
+            .enter().append("svg:image")
+            .attr("x", function(d,i){
+                return i * width/data.length;
+            })
+            .attr("y", 0)
+            .attr("xlink:href", function(d) {
+              return d.thumb;
+            })
+            .attr("width", width/data.length)
+            .attr("height", height/2);
 
-        for (var i = 0 ; i < data.length ; i++){
-            var rectangle = svgContainer.append("rect")
-                .attr("x", i*width/data.length)
-                .attr("y", 0)
-                .attr("width", width/data.length)
-                .attr("height", height/2);
+          var fisheye = d3.fisheye.circular()
+              .radius(200)
+              .distortion(2);
 
-            rectangle.append("clipPath")
-               .attr("id", function(d) { return "rect" + d.index; })
-               .append("rectangle")
-                .attr("x", i*width/data.length);
-                .attr("y", 0)
-                .attr("width", width/data.length)
-                .attr("height", height/2);
+              console.log(fisheye);
 
-            rectangle.append("image")
-                .attr("xlink:href", function(d) { return d.thumb; })
-                .attr("clip-path", function(d) { return "url(#rect" + d.index + ")";})
-                .attr("x", -50)
-                .attr("y", -50)
-                .attr("width", 100)
-                .attr("height", 100);
-        }
+          images.on("mousemove", function() {
+            console.log('mousemove!!');
+            fisheye.focus(d3.mouse(this));
+          });
 
+        // images.on("mouseover", function() {
 
+        // });
 
-         // node.on("mouseover", function() {
-         //   d3.select(this).transition()
-         //     .style("fill", "white")
-         //     .attr("r", 40)
-         //     .attr("cx", 0)
-         //     .attr("cy", 0)
-         //   .duration(1000)
-         //   .delay(100);
+        //  // node.on("mouseover", function() {
+        //  //   d3.select(this).transition()
+        //  //     .style("fill", "white")
+        //  //     .attr("r", 40)
+        //  //     .attr("cx", 0)
+        //  //     .attr("cy", 0)
+        //  //   .duration(1000)
+        //  //   .delay(100);
 
-           // d3.select(this).append("text")
-           //   .attr("dx", -20)
-           //   .attr("dy", 30)
-           //   .text(function(d) { return d.contribName; } );
-         //});
+        //    // d3.select(this).append("text")
+        //    //   .attr("dx", -20)
+        //    //   .attr("dy", 30)
+        //    //   .text(function(d) { return d.contribName; } );
+        //  //});
 
-         // node.on("click", function(d){
-         //           player.play(d);
-         //       });
+        //  // node.on("click", function(d){
+        //  //           player.play(d);
+        //  //       });
 
 
    }
