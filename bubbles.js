@@ -18,7 +18,7 @@
     onDataDone: function(data){
         console.log('bubble on data done');
         console.log(data);
-        Bubble.drawBubbles(data);
+        Bubble.drawBubbles(data.slice(0,20));
     },
     
     playIfShared: function(item){
@@ -69,55 +69,116 @@
         console.log('darwbubbles function');
 
         var width = 960,
-            height = 500
+            height = 500,
+            thumbr = 80, // this is the radius on width of thumbnails
+            centerRadius = Math.min(width/2-thumbr, height/2-thumbr);
 
         var svg = d3.select("body").append("svg")
             .attr("width", width)
             .attr("height", height);
 
+        var center = svg.append("circle")
+        .attr('cx', width/2)
+        .attr('cy', height/2)
+        .attr('r', centerRadius)
+        .attr('fill', 'black');
+
+        //inject a first element that all nodes will link to
+        data.unshift({});
+
+
         var force = d3.layout.force()
-            .gravity(.05)
-            .distance(100)
+            .gravity(0.3)
+            .distance(50)
             .charge(-100)
             .size([width, height]);
+        
+        var centralLinks = [];
+        for (var i = 1 ; i < data.length ; i++){
+          centralLinks.push({source: data[0], target: data[i]});
+        }
 
-
+        // start should be called again whenever the nodes and links change again
         force.nodes(data)
-            //.links(json.links)
+            .links(centralLinks)
+            .linkDistance(centerRadius*2)
+            .linkStrength(0.3)
             .start();
 
-          // var link = svg.selectAll(".link")
-          //     .data(json.links)
-          //   .enter().append("line")
-          //     .attr("class", "link");
+
+          var link = svg.selectAll(".link")
+            .data(centralLinks)
+            .enter().append("line")
+            .attr("class", "link");
 
           var node = svg.selectAll(".node")
-              .data(data)
+            .data(data)
             .enter().append("g")
-              .attr("class", "node")
-              .call(force.drag);
+            .attr("class", "node")
+            .call(force.drag);
 
           node.append("image")
               .attr("xlink:href", function(d) { return d.thumb; })
               .attr("x", -8)
               .attr("y", -8)
-              .attr("width", 80)
-              .attr("height", 80);
+              .attr("width", thumbr)
+              .attr("height", thumbr);
 
           node.append("text")
               .attr("dx", 12)
               .attr("dy", ".35em")
               .text(function(d) { return d.contribName; });
 
-          node.on("click", function(d){
-                    player.play(d);
-                });
+          // // play on click event
+          // node.on("click", function(d){
+          //           player.play(d);
+          //       });
+ 
+
 
            force.on("tick", function() {
-          //   link.attr("x1", function(d) { return d.source.x; })
-          //       .attr("y1", function(d) { return d.source.y; })
-          //       .attr("x2", function(d) { return d.target.x; })
-          //       .attr("y2", function(d) { return d.target.y; });
+            link.attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+            node.attr("cx", function(d) { 
+              if (d.index === 0 ){
+                return d.x = (width/2);
+              }
+            });
+
+            node.attr("cy", function(d) { 
+              if (d.index === 0 ){
+                return d.y = (height/2);
+              }
+            });
+
+            // node.attr("cy", function(d) { 
+            //   if (d.y < height/2){
+            //     return d.y = Math.min(height/2 - centerRadius , d.y);
+            //   } else {
+            //     return d.y = Math.max(height/2 + centerRadius , d.y);
+            //   }
+            // });
+
+
+            // node.attr("cx", function(d) { 
+            //   if (d.x < width/2){
+            //     return d.x = Math.min(width/2 - centerRadius , d.x);
+            //   } else {
+            //     return d.x = Math.max(width/2 + centerRadius , d.x);
+            //   }
+            // })
+
+            // node.attr("cy", function(d) { 
+            //   if (d.y < height/2){
+            //     return d.y = Math.min(height/2 - centerRadius , d.y);
+            //   } else {
+            //     return d.y = Math.max(height/2 + centerRadius , d.y);
+            //   }
+            // });
+
 
             node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
           });
