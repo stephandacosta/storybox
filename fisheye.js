@@ -71,7 +71,7 @@ var Fisheye = {
 
 console.log("mosaic");
 
-       var width = 960;
+       var width = 1200;
        var height = 200;
        var thumbr = 80;
        var imgWidth =  width / data.length;
@@ -82,23 +82,31 @@ console.log("mosaic");
        $mainDiv.css("width",width);
        $mainDiv.css("height",height);
        $mainDiv.css("padding", 0);
-       $mainDiv.css("background-color", "black");
+       // $mainDiv.css("background-color", "black");
         $("body").append($mainDiv);
 
+
         for (var i = 0; i < data.length ; i++){
+          // image container
            var $imgDiv = $('<div class="imgDiv"></div>');
            $imgDiv.css("float","left");
            $imgDiv.css("width",imgWidth);
            $imgDiv.css("height",height);
            $imgDiv.css("padding", 0);
            $imgDiv.css("overflow", "hidden");
-           $img = $('<img src="'+ data[i].thumb + '">');
+
+
+           // image in container
+           var $img = $('<img src="'+ data[i].thumb + '">');
            $img.css("position","absolute");
            $img.css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
            $imgDiv.append($img);
            $imgDiv.mouseenter(function() {
-             $(this).css("width",imgWidth*6);
-             $(this).find('img').css("clip","rect(0px," + imgWidth*6 + "px," + imgHeight + "px, 0px");
+             $(this).css("width",200);
+             $(this).css("height",200);
+             $(this).find('img').css("clip","auto");
+             $(this).find('img').css("width",200);
+             $(this).find('img').css("height",200);
            });
            $imgDiv.mouseleave(function() {
              $(this).css("width",imgWidth);
@@ -106,7 +114,10 @@ console.log("mosaic");
            });
            $mainDiv.append($imgDiv);
         }
-
+ 
+          // test to delete
+          $('body').append('<div class="mydiv">').append($('<img src="'+ data[0].thumb + '">'));
+           console.log($('.mydiv'));
 
         //  // node.on("click", function(d){
         //  //           player.play(d);
