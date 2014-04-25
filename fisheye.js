@@ -20,7 +20,7 @@ var Fisheye = {
    onDataDone: function(data){
        console.log('fisheye on data done');
        console.log(data);
-       Fisheye.drawMosaic(data.slice(0,20));
+       Fisheye.drawMosaic(data.slice(0,50));
    },
 
    playIfShared: function(item){
@@ -71,43 +71,48 @@ var Fisheye = {
 
 console.log("mosaic");
 
-       var width = 960,
-           height = 500,
-          thumbr = 80;
+       var width = 960;
+       var height = 200;
+       var thumbr = 80;
+       var imgWidth =  width / data.length;
+       var imgHeight =  height;
 
 
-       var svg = d3.select("body").append("svg")
-           .attr("width", width)
-           .attr("height", height)
-           .attr("class", "canvas");
+       var $mainDiv = $('<div class="mainDiv"></div>');
+       $mainDiv.css("width",width);
+       $mainDiv.css("height",height);
+       $mainDiv.css("padding", 0);
+       $mainDiv.css("background-color", "black");
+        $("body").append($mainDiv);
 
-       var images = svg.selectAll(".vgimg")
-            .data(data)
-            .enter().append("svg:image")
-            .attr("x", function(d,i){
-                return i * width/data.length;
-            })
-            .attr("y", 0)
-            .attr("xlink:href", function(d) {
-              return d.thumb;
-            })
-            .attr("width", width/data.length)
-            .attr("height", height/2);
+        for (var i = 0; i < data.length ; i++){
+           var $imgDiv = $('<div class="imgDiv"></div>');
+           $imgDiv.css("float","left");
+           $imgDiv.css("width",imgWidth);
+           $imgDiv.css("height",height);
+           $imgDiv.css("padding", 0);
+           // $imgDiv.css("background-color", "blue");
+           $imgDiv.css("overflow", "hidden");
+           //<img src="book.png" alt="Book" id="book">
+           $img = $('<img src="'+ data[i].thumb + '">');
+           $img.css("position","absolute");
+           $img.css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
+           $imgDiv.append($img);
+           $imgDiv.mouseenter(function() {
+             // $(this).css("background-color", "red");
+             $(this).css("width",imgWidth*6);
+             $(this).first().css("clip","rect(0px," + imgWidth*6 + "px," + imgHeight + "px, 0px");
+           });
+           $imgDiv.mouseleave(function() {
+             // $(this).css("background-color", "blue");
+             $(this).css("width",imgWidth);
+             $(this).first().css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
+           });
+           $mainDiv.append($imgDiv);
+        }
 
-          var fisheye = d3.fisheye.circular()
-              .radius(200)
-              .distortion(2);
 
-              console.log(fisheye);
 
-          images.on("mousemove", function() {
-            console.log('mousemove!!');
-            fisheye.focus(d3.mouse(this));
-          });
-
-        // images.on("mouseover", function() {
-
-        // });
 
         //  // node.on("mouseover", function() {
         //  //   d3.select(this).transition()
