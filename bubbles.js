@@ -69,13 +69,26 @@ var Bubble = {
     //parameters
     var width = 960;  // need to make reponsive
     var height = 500;  // need to make reponsive
-    var thumbr = 40; // this is the radius on width of thumbnails
-    var centerRadius = Math.min(width/2-thumbr, height/2-thumbr);
+    var thumbRadius = 40; // this is the radius on width of thumbnails
+    var centerRadius = Math.min(width/2-thumbRadius, height/2-thumbRadius);
+    var stroke = 5;
 
     var gravity = 0.3;
     var distance = 50;
     var charge = -1000;
 
+    var centralLinksDistance = function(){
+      return centerRadius * (1+Math.random());
+    };
+    var distributedLinksDistance = function(){
+      return thumbRadiusadius * 2;
+    };
+    var centralLinksStrength = function(){
+      return Math.max(Math.random(),0.5);
+    };
+    var distributedLinksStrength = function(){
+      return 0.2;
+    };
 
     //main container
     var svg = d3.select("body").append("svg")
@@ -99,263 +112,238 @@ var Bubble = {
     .size([width, height]);
 
 
-    // to create links between center and everynode
+  // Links arrays
+    // links from center
     var centralLinks = [];
     for (var i = 1 ; i < data.length ; i++){
       centralLinks.push({source: data[0], target: data[i], distance: centerRadius});
     }
-
+    // distributed links
     var contentLinks = [];
     for (var i = 1 ; i < data.length ; i++){
       for (var j = 1 ; j < data.length ; j++){
         contentLinks.push({source: data[i], target: data[j]});
       }
     }
-
+    //concatentation of center and distributed links
     var allLinks = centralLinks.concat(contentLinks);
-    // for (var k = 0 ; k< allLinks.length ; k++){
-      // console.log('[source:',allLinks[0].source,'- target:', allLinks[0].target,']');
+
+  /* *** test on getting links indexes (delete)
       console.log('object',allLinks[0].target);
       console.log('object.keys',Object.keys(allLinks[0].target));
       console.log('object.hasOwnProperty(index)',allLinks[0].target.hasOwnProperty('index'));
       console.log('object.index',allLinks[0].target.index);
-      // console.log(typeof arr[0].target['_used']);
-     // }
+  // end delete */
 
       // start should be called again whenever the nodes and links change again
-      force.nodes(data)
-          .links(centralLinks)
-          .linkDistance(function(link, index){
-              if (link.source.index === 0) {
-                return centerRadius * (1+Math.random()) ;
-              } else {
-                return thumbr * 4;
-              }
-          })
-          .linkStrength(function(link, index){
-              if (link.source.index === 0) {
-                return Math.max(Math.random(),0.5);
-              } else {
-                return 0.2;
-              }
-          })
-          .start();
+    force.nodes(data)
+    .links(centralLinks)
+    .linkDistance(function(link, index){
+      if (link.source.index === 0) {
+        return centralLinksDistance() ;
+      } else {
+        return distributedLinksDistance();
+      }
+    })
+    .linkStrength(function(link, index){
+        if (link.source.index === 0) {
+          return centralLinksStrength();
+        } else {
+          return distributedLinksStrength();
+        }
+    })
+    .start();
+
+    /* uncomment to create links in DOM
+    var link = svg.selectAll(".link")
+    .data(centralLinks)
+    .enter().append("line")
+    .attr("class", "link");
+    $(".link").css("stroke", "black");
+    */
+
+    // create nodes in DOM
+    var node = svg.selectAll(".node")
+    .data(data)
+    .enter().append("g")
+    .attr("class", "node")
+    .call(force.drag);
+
+    var networkColors = {
+      Youtube: "red",
+      Twitter: "cyan",
+      Instagram: "blue",
+      VGVideo: "magenta",
+      Photo: "green"
+    };
 
 
-        var link = svg.selectAll(".link")
-          .data(centralLinks)
-          .enter().append("line")
-          .attr("class", "link");
-
-        // $(".link").css("stroke", "black");
-
-         var node = svg.selectAll(".node")
-             .data(data)
-           .enter().append("g")
-             .attr("class", "node")
-             .call(force.drag);
+    node.append("circle")
+    .attr("class", "innercircle")
+    .style("stroke", function(d) { return networkColors[d.network];})
+    .style("stroke-width", stroke)
+    .style("fill", "black")
+    .attr("r", thumbRadius)
+    .attr("cx", 0)
+    .attr("cy", 0);
 
 
+    node.append("clipPath")
+    .attr("id", function(d) { return "innerCircle" + d.index; })
+    .attr("class", "clip")
+    .append("circle")
+    .attr("class", "clipcircle")
+    .attr("r", thumbRadius-stroke/2)
+    .attr("cx", 0)
+    .attr("cy", 0);
 
-         color = "#33CCFF";
-         node.append("circle")
-             .attr("class", "outercircle")
-             .style("fill", function(d) {
-               if (d.network === "Youtube") {
-                 return "red";
-               } else if (d.network === "Twitter") {
-                 return "cyan";
-               } else if (d.network === "Instagram") {
-                 return "blue";
-               } else if (d.network === "VGVideo") {
-                 return "magenta";
-               } else if (d.network === "Photo") {
-                 return "green";
-               }
-             })
-             .attr("r", 45)
-             .attr("cx", 0)
-             .attr("cy", 0);
+    node.append("image")
+    .attr("class","image")
+    .attr("xlink:href", function(d) { return d.thumb; })
+    .attr("clip-path", function(d) { return "url(#innerCircle" + d.index + ")";})
+    .attr("x", -50)
+    .attr("y", -50)
+    .attr("width", 100)
+    .attr("height", 100);
 
-         node.append("circle")
-             .attr("class", "innercircle")
-             .style("fill", "black")
-             .attr("r", thumbr)
-             .attr("cx", 0)
-             .attr("cy", 0);
+    var center = svg.append("circle")
+    .attr('cx', width/2)
+    .attr('cy', height/2)
+    .attr('r', centerRadius/2)
+    .attr('stroke','black')
+    .attr('fill', 'white')
+    .append("text")
+    .attr("x", width/2)
+    .attr("x", width/2)
+    .text("test");
 
+    node.on("mouseenter", function() {
+      d3.select(this).select(".innercircle").transition()
+      .attr("r", thumbRadius*3)
+      .style("z-index", 10)
+      .duration(500)
+      .delay(0);
 
-         node.append("clipPath")
-             .attr("id", function(d) { return "innerCircle" + d.index; })
-             .attr("class", "clip")
-             .append("circle")
-             .attr("class", "clipcircle")
-             .attr("r", thumbr)
-             .attr("cx", 0)
-             .attr("cy", 0);
+      d3.select(this).select(".clip").transition()
+      .attr("r", thumbRadius*3)
+      .style("z-index", 10)
+      .duration(500)
+      .delay(0);
 
-         node.append("image")
-             .attr("class","image")
-             .attr("xlink:href", function(d) { return d.thumb; })
-             .attr("clip-path", function(d) { return "url(#innerCircle" + d.index + ")";})
-             .attr("x", -50)
-             .attr("y", -50)
-             .attr("width", 100)
-             .attr("height", 100);
+      d3.select(this).select(".clipcircle").transition()
+      .attr("r", thumbRadius*3)
+      .style("z-index", 10)
+      .duration(500)
+      .delay(0);
 
+      d3.select(this).select(".image").transition()
+      .style("z-index", 10)
+      .attr("width", 300)
+      .attr("height", 300)
+      .attr("x",-150)
+      .attr("y",-150)
+      .duration(500)
+      .delay(0);
 
-         node.on("mouseenter", function() {
-          console.log("mouseover");
+      // d3.select(this).append("text")
+      //   .attr("dx", -20)
+      //   .attr("dy", 30)
+      //   .text(function(d) { return d.contribName; } );
+    });
 
-           console.log(this);
+    node.on("mouseleave", function() {
 
-           d3.select(this).select(".outercircle").transition()
-             .attr("r", thumbr*3)
-             .style("z-index", 10)
-            .duration(500)
-           .delay(0);
+      d3.select(this).select(".innercircle").transition()
+      .style("z-index", 5)
+      .attr("r", thumbRadius)
+      .duration(1000)
+      .delay(10);
 
-           d3.select(this).select(".innercircle").transition()
-           .attr("r", thumbr*3)
-           .style("z-index", 10)
-           .duration(500)
-           .delay(0);
+      d3.select(this).select(".clip").transition()
+      .style("z-index", 5)
+       .attr("r", thumbRadius)
+      .duration(1000)
+      .delay(10);
 
-           d3.select(this).select(".clip").transition()
-             .attr("r", thumbr*3)
-            .style("z-index", 10)
-           .duration(500)
-           .delay(0);
+      d3.select(this).select(".clipcircle").transition()
+      .style("z-index", 5)
+      .attr("r", thumbRadius)
+      .duration(1000)
+      .delay(10);
 
-           d3.select(this).select(".clipcircle").transition()
-           .attr("r", thumbr*3)
-          .style("z-index", 10)
-           .duration(500)
-           .delay(0);
+      d3.select(this).select(".image").transition()
+      .style("z-index", 5)
+      .attr("width", 100)
+      .attr("height", 100)
+      .attr("x",-50)
+      .attr("y",-50)
+      .duration(1000)
+      .delay(10);
 
-           d3.select(this).select(".image").transition()
-          .style("z-index", 10)
-           .attr("width", 300)
-          .attr("height", 300)
-          .attr("x",-150)
-          .attr("y",-150)
-           .duration(500)
-           .delay(0);
-
-
-           // d3.select(this).append("text")
-           //   .attr("dx", -20)
-           //   .attr("dy", 30)
-           //   .text(function(d) { return d.contribName; } );
-         });
-
-          node.on("mouseleave", function() {
-          console.log("mouseleave");
-           d3.select(this).select(".outercircle").transition()
-            .style("z-index", 5)
-             .attr("r", thumbr)
-           .duration(1000)
-           .delay(10);
-
-           d3.select(this).select(".innercircle").transition()
-           .style("z-index", 5)
-           .attr("r", thumbr)
-           .duration(1000)
-           .delay(10);
-
-           d3.select(this).select(".clip").transition()
-           .style("z-index", 5)
-             .attr("r", thumbr)
-           .duration(1000)
-           .delay(10);
-
-           d3.select(this).select(".clipcircle").transition()
-           .style("z-index", 5)
-           .attr("r", thumbr)
-           .duration(1000)
-           .delay(10);
-
-           d3.select(this).select(".image").transition()
-           .style("z-index", 5)
-           .attr("width", 100)
-          .attr("height", 100)
-          .attr("x",-50)
-          .attr("y",-50)
-           .duration(1000)
-           .delay(10);
+     // d3.select(this).append("text")
+     //   .attr("dx", -20)
+     //   .attr("dy", 30)
+     //   .text(function(d) { return d.contribName; } );
+    });
 
 
-           // d3.select(this).append("text")
-           //   .attr("dx", -20)
-           //   .attr("dy", 30)
-           //   .text(function(d) { return d.contribName; } );
-         });
+    // player configuration
+    $("#playerBox_container").css("-webkit-transform", "scale(0.4,0.4)");
+    $("#playerBox_container").css("top", height/2);
+    $("#playerBox_container").css("left", width/2);
+    $("#playerBox_container").css("position", "absolute");
+    //  $("#playerBox_container").css("height", 200);
 
 
 
-           $("#playerBox_container").css("-webkit-transform", "scale(0.4,0.4)");
-           $("#playerBox_container").css("top", height/2);
-          $("#playerBox_container").css("left", width/2);
-           $("#playerBox_container").css("position", "absolute");
-          //  $("#playerBox_container").css("height", 200);
- 
+    // click event --> plays video
+    node.on("click", function(d){
+      player.play(d);
+    });
+
+    // time interval to enable continuous movement
+    setInterval(function(){
+      console.log("moving");
+      // force.alpha(0.1);
+      node.attr("x", function(d){return d.x+Math.random()*5;})
+      .attr("y", function(d){
+        if (d.y >= height/2){
+          return d.y-10;
+        } else {
+          return d.y+10;
+        }
+      });
+    }, 200);
 
 
+    force.on("tick", function() {
 
-         node.on("click", function(d){
-                   player.play(d);
-               });
+      /* uncomment to show links - links repositionning
+      link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+      */
 
-        setInterval(function(){
-          console.log("moving");
-          // force.alpha(0.1);
-          node.attr("x", function(d){return d.x+Math.random()*5;})
-          .attr("y", function(d){
-            if (d.y >= height/2){
-              return d.y-10;
-            } else {
-              return d.y+10;
-            }
-          });
-        }, 200);
+      // circles repositionning
+      node.attr("cx", function(d) { 
+        if (d.index === 0 ){
+          return d.x = (width/2);
+        } else {
+          return d.x = Math.max(thumbRadius+5, Math.min(width-thumbRadius-5, d.x));
+        }
+      });
+      node.attr("cy", function(d) { 
+        if (d.index === 0 ){
+          return d.y = (height/2);
+        } else {
+          return d.y = Math.max(thumbRadius+5, Math.min(height-thumbRadius-5, d.y));
+        }
+      });
+      node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
+    });
 
-         force.on("tick", function() {
-          link.attr("x1", function(d) { return d.source.x; })
-              .attr("y1", function(d) { return d.source.y; })
-              .attr("x2", function(d) { return d.target.x; })
-              .attr("y2", function(d) { return d.target.y; });
+  }
 
-
-          node.attr("cx", function(d) { 
-            if (d.index === 0 ){
-              return d.x = (width/2);
-            } else {
-              return d.x = Math.max(thumbr+5, Math.min(width-thumbr-5, d.x));
-            }
-          });
-
-
-          node.attr("cy", function(d) { 
-            if (d.index === 0 ){
-              return d.y = (height/2);
-            } else {
-              return d.y = Math.max(thumbr+5, Math.min(height-thumbr-5, d.y));
-            }
-          });
-
-
-
-
-
-          node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-        });
-
-
-
-       }
-
-
-
-
-   };
+};
