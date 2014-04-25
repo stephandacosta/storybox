@@ -102,6 +102,12 @@ console.log("mosaic");
            $img.css("clip","rect(0px,100px,200px,50px)");
            $imgDiv.append($img);
            $imgDiv.mouseenter(function() {
+             // $(this).prev().prev().prev().css("width",50);
+             // $(this).prev().prev().prev().css("height",200);
+             // $(this).prev().prev().css("width",100);
+             // $(this).prev().prev().css("height",200);
+             // $(this).prev().css("width",150);
+             // $(this).prev().css("height",200);
              $(this).css("width",200);
              $(this).css("height",200);
              $(this).find('img').css("clip","auto");
@@ -116,8 +122,8 @@ console.log("mosaic");
         }
  
           // test to delete
-          $('body').append('<div class="mydiv">').append($('<img src="'+ data[0].thumb + '">'));
-           console.log($('.mydiv'));
+          // $('body').append('<div class="mydiv">').append($('<img src="'+ data[0].thumb + '">'));
+          //  console.log($('.mydiv'));
 
         //  // node.on("click", function(d){
         //  //           player.play(d);
