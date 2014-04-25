@@ -66,6 +66,8 @@ var Bubble = {
   drawBubbles : function (data){
     console.log('darwbubbles function');
 
+    // console.log(data[1]);
+
     //parameters
     var width = 960;  // need to make reponsive
     var height = 500;  // need to make reponsive
@@ -180,9 +182,9 @@ var Bubble = {
 
     node.append("circle")
     .attr("class", "innercircle")
-    .style("stroke", function(d) { return networkColors[d.network];})
+    .style("stroke", function(d) { return d.index===0? "black" : networkColors[d.network];})
     .style("stroke-width", stroke)
-    .style("fill", "black")
+    .style("fill", function(d) {return d.index===0? "white" : "black";})
     .attr("r", thumbRadius)
     .attr("cx", 0)
     .attr("cy", 0);
@@ -201,47 +203,61 @@ var Bubble = {
     .attr("class","image")
     .attr("xlink:href", function(d) { return d.thumb; })
     .attr("clip-path", function(d) { return "url(#innerCircle" + d.index + ")";})
-    .attr("x", -50)
-    .attr("y", -50)
-    .attr("width", 100)
-    .attr("height", 100);
+    .attr("x", -thumbRadius)
+    .attr("y", -thumbRadius)
+    .attr("width", thumbRadius*2)
+    .attr("height", thumbRadius*2);
 
-    var center = svg.append("circle")
-    .attr('cx', width/2)
-    .attr('cy', height/2)
-    .attr('r', centerRadius/2)
-    .attr('stroke','black')
-    .attr('fill', 'white')
-    .append("text")
-    .attr("x", width/2)
-    .attr("x", width/2)
-    .text("test");
+ 
+    node.append('text')
+    .attr()
+    .attr("fill","black")
+    .text(function(d){return d.index===0 ? "test" : "";});
 
     node.on("mouseenter", function() {
+
+      // work on central circle
+      d3.select("circle").transition()
+      .attr("r", centerRadius)
+      .style("z-index", 10)
+      .duration(500)
+      .delay(0);
+      
+      // get text from moused enter
+      d3.select(this).attr("text", function(d){return d.textHtml;});
+      var msg = d3.select(this).attr("text");
+
+      d3.select("text").transition()
+      .text(msg)
+      .attr("font-size", "12")
+      .duration(500)
+      .delay(0);
+
+
       d3.select(this).select(".innercircle").transition()
-      .attr("r", thumbRadius*3)
+      .attr("r", thumbRadius*1.5)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".clip").transition()
-      .attr("r", thumbRadius*3)
+      .attr("r", thumbRadius*1.5)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".clipcircle").transition()
-      .attr("r", thumbRadius*3)
+      .attr("r", thumbRadius*1.5)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".image").transition()
       .style("z-index", 10)
-      .attr("width", 300)
-      .attr("height", 300)
-      .attr("x",-150)
-      .attr("y",-150)
+      .attr("width", thumbRadius*2*1.5)
+      .attr("height", thumbRadius*2*1.5)
+      .attr("x",-thumbRadius*1.5)
+      .attr("y",-thumbRadius*1.5)
       .duration(500)
       .delay(0);
 
@@ -252,6 +268,17 @@ var Bubble = {
     });
 
     node.on("mouseleave", function() {
+
+      d3.select("circle").transition()
+      .attr("r", thumbRadius)
+      .style("z-index", 5)
+      .duration(500)
+      .delay(0);
+
+      d3.select("text").transition()
+      .attr("font-size", "1")
+      .duration(500)
+      .delay(0);
 
       d3.select(this).select(".innercircle").transition()
       .style("z-index", 5)
@@ -288,10 +315,10 @@ var Bubble = {
 
 
     // player configuration
-    $("#playerBox_container").css("-webkit-transform", "scale(0.4,0.4)");
-    $("#playerBox_container").css("top", height/2);
-    $("#playerBox_container").css("left", width/2);
-    $("#playerBox_container").css("position", "absolute");
+    // $("#playerBox_container").css("-webkit-transform", "scale(0.4,0.4)");
+    // $("#playerBox_container").css("top", height/2);
+    // $("#playerBox_container").css("left", width/2);
+    // $("#playerBox_container").css("position", "absolute");
     //  $("#playerBox_container").css("height", 200);
 
 
