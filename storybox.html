@@ -136,7 +136,72 @@
     </div>
     
     <!-- Player popup code. -->
-    <div id="playerBox_overlay" class="overlay hide"> <div class="overlay-bg"> </div> <div id="playerBox_container"> <div id="playerBox"> <a class="prevVideo">&lsaquo;</a> <div id="player_prompt"> <a id="record_now" class="record_now" href="#">Share Your Story</a> Your Story </div> <div class="topBar"> <a href="#" class="record_now topBarBtn" style="display: none;">Share Your Story</a> <a href="#" class="overlay-close closeBtn topBarBtn">&times;</a> </div> <div class="player_cont" style="color:white"> <div id="playerSocial"> <div id="voting"></div><div id="social" style="display:none;"> <div class="shareBtn" title="Share"> <p>Share</p> <div class="socialPopup"> <a class="facebookBtn socialBtn" title="Facebook"> Facebook </a> <a class="twitterBtn socialBtn" title="Twitter"> Twitter </a> <a class="linkedinBtn socialBtn" title="Linked In"> Linked In </a> <a class="googleplusBtn socialBtn" title="Google Plus"> Google Plus </a> <a class="emailBtn socialBtn" title="Email"> Email </a> </div> </div> </div><div class="playerPoweredBy"> Powered By <a href="http://www.videogenie.com/" target="_blank" class="smallVGLogo">VideoGenie</a></div> <div class="player" id="player"> <div class="player-cnt" id="player-cnt"><img class="thumb" src="https://akdl1.videogenie.com/blank.jpg" alt="click to play" /> <div class="player-warning"><span class="player-warning-message">Your browser does not support video playback.</span></div> </div> </div></div> </div> <div id="clipInfo"> </div> <a class="nextVideo">&rsaquo;</a> </div> </div> </div>    
+   <div class="overlay hide" id="playerBox_overlay">
+        <div class="overlay-bg"></div>
+
+        <div id="playerBox_container">
+            <div id="playerBox">
+                <a class="prevVideo">‹</a>
+
+                <div id="player_prompt">
+                    <a class="record_now" href="#" id="record_now" name=
+                    "record_now">Share Your Story</a> Your Story
+                </div>
+
+                <div class="topBar">
+                    <a class="record_now topBarBtn" href="#" style=
+                    "display: none;">Share Your Story</a> <a class=
+                    "overlay-close closeBtn topBarBtn" href="#">×</a>
+                </div>
+
+                <div class="player_cont" style="color:white">
+                    <div id="playerSocial">
+                        <div id="voting"></div>
+
+                        <div id="social" style="display:none;">
+                            <div class="shareBtn" title="Share">
+                                <p>Share</p>
+
+                                <div class="socialPopup">
+                                    <a class="facebookBtn socialBtn" title=
+                                    "Facebook">Facebook</a> <a class=
+                                    "twitterBtn socialBtn" title=
+                                    "Twitter">Twitter</a> <a class=
+                                    "linkedinBtn socialBtn" title=
+                                    "Linked In">Linked In</a> <a class=
+                                    "googleplusBtn socialBtn" title=
+                                    "Google Plus">Google Plus</a> <a class=
+                                    "emailBtn socialBtn" title=
+                                    "Email">Email</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="playerPoweredBy">
+                            Powered By <a class="smallVGLogo" href=
+                            "http://www.videogenie.com/" target=
+                            "_blank">VideoGenie</a>
+                        </div>
+
+                        <div class="player" id="player">
+                            <div class="player-cnt" id="player-cnt">
+                                <img alt="click to play" class="thumb" src=
+                                "https://akdl1.videogenie.com/blank.jpg">
+
+                                <div class="player-warning">
+                                    <span class="player-warning-message">Your
+                                    browser does not support video
+                                    playback.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="clipInfo"></div><a class="nextVideo">›</a>
+            </div>
+        </div>
+    </div>    
     <script>
     var player = new VGPlayer('player', [campaignInfo.firstClip] ,{
         autoPlay: false, 
