@@ -16,7 +16,7 @@ var Bubble = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Bubble.drawBubbles(data.slice(0,20));
+    Bubble.drawBubbles(data.slice(0,30));
   },
 
   playIfShared: function(item){
@@ -206,33 +206,41 @@ var Bubble = {
 
          node.on("mouseenter", function() {
           console.log("mouseover");
+
+           console.log(this);
+
            d3.select(this).select(".outercircle").transition()
-             .attr("r", thumbr*2)
-           .duration(1000)
-           .delay(10);
+             .attr("r", thumbr*3)
+             .style("z-index", 10)
+            .duration(500)
+           .delay(0);
 
            d3.select(this).select(".innercircle").transition()
-           .attr("r", thumbr*2)
-           .duration(1000)
-           .delay(10);
+           .attr("r", thumbr*3)
+           .style("z-index", 10)
+           .duration(500)
+           .delay(0);
 
            d3.select(this).select(".clip").transition()
-             .attr("r", thumbr*2)
-           .duration(1000)
-           .delay(10);
+             .attr("r", thumbr*3)
+            .style("z-index", 10)
+           .duration(500)
+           .delay(0);
 
            d3.select(this).select(".clipcircle").transition()
-           .attr("r", thumbr*2)
-           .duration(1000)
-           .delay(10);
+           .attr("r", thumbr*3)
+          .style("z-index", 10)
+           .duration(500)
+           .delay(0);
 
            d3.select(this).select(".image").transition()
-           .attr("width", 200)
-          .attr("height", 200)
-          .attr("x",-100)
-          .attr("y",-100)
-           .duration(1000)
-           .delay(10);
+          .style("z-index", 10)
+           .attr("width", 300)
+          .attr("height", 300)
+          .attr("x",-150)
+          .attr("y",-150)
+           .duration(500)
+           .delay(0);
 
 
            // d3.select(this).append("text")
@@ -244,26 +252,31 @@ var Bubble = {
           node.on("mouseleave", function() {
           console.log("mouseleave");
            d3.select(this).select(".outercircle").transition()
+            .style("z-index", 5)
              .attr("r", thumbr)
            .duration(1000)
            .delay(10);
 
            d3.select(this).select(".innercircle").transition()
+           .style("z-index", 5)
            .attr("r", thumbr)
            .duration(1000)
            .delay(10);
 
            d3.select(this).select(".clip").transition()
+           .style("z-index", 5)
              .attr("r", thumbr)
            .duration(1000)
            .delay(10);
 
            d3.select(this).select(".clipcircle").transition()
+           .style("z-index", 5)
            .attr("r", thumbr)
            .duration(1000)
            .delay(10);
 
            d3.select(this).select(".image").transition()
+           .style("z-index", 5)
            .attr("width", 100)
           .attr("height", 100)
           .attr("x",-50)
@@ -293,6 +306,19 @@ var Bubble = {
                    player.play(d);
                });
 
+        setInterval(function(){
+          console.log("moving");
+          // force.alpha(0.1);
+          node.attr("x", function(d){return d.x+Math.random()*5;})
+          .attr("y", function(d){
+            if (d.y >= height/2){
+              return d.y-10;
+            } else {
+              return d.y+10;
+            }
+          });
+        }, 200);
+
 
          force.on("tick", function() {
           link.attr("x1", function(d) { return d.source.x; })
@@ -304,13 +330,17 @@ var Bubble = {
           node.attr("cx", function(d) { 
             if (d.index === 0 ){
               return d.x = (width/2);
-            } 
+            } else {
+              return d.x = Math.max(thumbr+5, Math.min(width-thumbr-5, d.x));
+            }
           });
 
 
           node.attr("cy", function(d) { 
             if (d.index === 0 ){
               return d.y = (height/2);
+            } else {
+              return d.y = Math.max(thumbr+5, Math.min(height-thumbr-5, d.y));
             }
           });
 
