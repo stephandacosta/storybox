@@ -91,43 +91,22 @@ console.log("mosaic");
            $imgDiv.css("width",imgWidth);
            $imgDiv.css("height",height);
            $imgDiv.css("padding", 0);
-           // $imgDiv.css("background-color", "blue");
            $imgDiv.css("overflow", "hidden");
-           //<img src="book.png" alt="Book" id="book">
            $img = $('<img src="'+ data[i].thumb + '">');
            $img.css("position","absolute");
            $img.css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
            $imgDiv.append($img);
            $imgDiv.mouseenter(function() {
-             // $(this).css("background-color", "red");
              $(this).css("width",imgWidth*6);
-             $(this).first().css("clip","rect(0px," + imgWidth*6 + "px," + imgHeight + "px, 0px");
+             $(this).find('img').css("clip","rect(0px," + imgWidth*6 + "px," + imgHeight + "px, 0px");
            });
            $imgDiv.mouseleave(function() {
-             // $(this).css("background-color", "blue");
              $(this).css("width",imgWidth);
-             $(this).first().css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
+             $(this).find('img').css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
            });
            $mainDiv.append($imgDiv);
         }
 
-
-
-
-        //  // node.on("mouseover", function() {
-        //  //   d3.select(this).transition()
-        //  //     .style("fill", "white")
-        //  //     .attr("r", 40)
-        //  //     .attr("cx", 0)
-        //  //     .attr("cy", 0)
-        //  //   .duration(1000)
-        //  //   .delay(100);
-
-        //    // d3.select(this).append("text")
-        //    //   .attr("dx", -20)
-        //    //   .attr("dy", 30)
-        //    //   .text(function(d) { return d.contribName; } );
-        //  //});
 
         //  // node.on("click", function(d){
         //  //           player.play(d);
