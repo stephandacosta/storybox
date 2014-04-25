@@ -74,7 +74,7 @@ console.log("mosaic");
        var width = 1200;
        var height = 200;
        var thumbr = 80;
-       var imgWidth =  width / data.length;
+       var imgWidth =  (width-300) / data.length;
        var imgHeight =  height;
 
 
@@ -99,7 +99,7 @@ console.log("mosaic");
            // image in container
            var $img = $('<img src="'+ data[i].thumb + '">');
            $img.css("position","absolute");
-           $img.css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
+           $img.css("clip","rect(0px,100px,200px,50px)");
            $imgDiv.append($img);
            $imgDiv.mouseenter(function() {
              $(this).css("width",200);
@@ -110,7 +110,7 @@ console.log("mosaic");
            });
            $imgDiv.mouseleave(function() {
              $(this).css("width",imgWidth);
-             $(this).find('img').css("clip","rect(0px," + imgWidth + "px," + imgHeight + "px, 0px");
+             $(this).find('img').css("clip","rect(0px,100px,200px,50px)");
            });
            $mainDiv.append($imgDiv);
         }
