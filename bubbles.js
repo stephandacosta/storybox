@@ -92,8 +92,9 @@ var Bubble = {
 
       /* Attach mouse interaction to root element */
       /* Note use of $.proxy to maintain context */
-      this.el.on('mouseover', $.proxy(this.showToolTip, this));
-      this.el.on('mouseout', $.proxy(this.hideToolTip, this));
+      // this.el.on('mouseover', $.proxy(this.showToolTip, this));
+      // this.el.on('mouseout', $.proxy(this.hideToolTip, this));
+
 
       /* Set CSS of Elements  */
       this.radius = this.data;
@@ -120,7 +121,7 @@ var Bubble = {
     };
 
     SimpleBubble.prototype.hideToolTip = function() {
-      $(".tooltip").remove();
+      // $(".tooltip").remove();
     };
 
     SimpleBubble.prototype.move = function() {
@@ -132,8 +133,9 @@ var Bubble = {
       this.height = 400;
       this.canvas = container;
       this.data = d;
-      this.force = null;
+      this.force = -100;
       this.bubbles = [];
+      this.nlinks = []
       this.centers = [
       {x: 200, y:200},
       {x: 400, y:200},
@@ -143,7 +145,7 @@ var Bubble = {
       this.bin = d3.scale.ordinal().range([0,1,2]);
 
       this.bubbleCharge = function(d) {
-        return -Math.pow(d.radius,1) * 8;
+        return -Math.pow(d.radius,1) * 50;
       };
 
       this.init();
@@ -164,29 +166,58 @@ var Bubble = {
       for(var i=0; i< this.data.length; i++) {
         var b = new SimpleBubble(this.data[i], i, this.canvas);
         /* Define Starting locations */
-        b.x = b.boxSize + (20 * (i+1));
-        b.y = b.boxSize + (10 * (i+1));
+        if (b.index===0){
+          b.x = this.width/2;
+          b.y = this.height/2;
+        } else {
+          b.x = b.boxSize + (20 * (i+1));
+          b.y = b.boxSize + (10 * (i+1));
+        }
         this.bubbles.push(b);
         /* Add root bubble element to visualization */
         this.canvas.append(b.el);
-      };
+      }
+
+      for (var i = 1; i<this.data.length; i++) {
+        // for (var j = 0 ; j < this.data.length ; j++){
+          this.nlinks.push({source:0, target:i, distance: 200});
+        // }
+      }
+
 
       /* Setup force layout */
       this.force = d3.layout.force()
         .nodes(this.bubbles)
-        .gravity(0)
+        .links(this.nlinks)
+        .linkStrength(0.2)
+        .gravity(0.3)
         .charge(this.bubbleCharge)
         .friction(0.87)
         .size([this.width, this.height])
         .on("tick", function(e) {
           me.bubbles.forEach( function(b) {
-            me.setBubbleLocation(b, e.alpha, me.centers);
+            // me.setBubbleLocation(b, e.alpha, me.centers);
             b.move();
           });
         });
 
       this.force.start();
+
+      d3.select("body").on("mouseup", this.force.start);
+
+      // dragging
+      var thatforce = this.force;
+      var dragmove = function() {
+
+        $(this).css({top: d3.event.y, left:d3.event.x});
+        // thatforce.tick();
+      };
+      var drag = d3.behavior.drag().on("drag", dragmove);
+      d3.select("body").selectAll(".bubble").call(drag);
+
+
     };
+
 
     SimpleVis.prototype.setBubbleLocation = function(bubble, alpha, centers) {
       var center = centers[this.bin(bubble.id)];
