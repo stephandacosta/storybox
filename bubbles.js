@@ -209,10 +209,10 @@ var Bubble = {
     .attr("height", thumbRadius*2);
 
  
-    node.append('text')
-    .attr()
-    .attr("fill","black")
-    .text(function(d){return d.index===0 ? "test" : "";});
+    // node.append('text')
+    // .attr()
+    // .attr("fill","black")
+    // .text(function(d){return d.index===0 ? "test" : "";});
 
     node.on("mouseenter", function() {
 
@@ -227,11 +227,19 @@ var Bubble = {
       d3.select(this).attr("text", function(d){return d.textHtml;});
       var msg = d3.select(this).attr("text");
 
-      d3.select("text").transition()
-      .text(msg)
-      .attr("font-size", "12")
-      .duration(500)
-      .delay(0);
+      d3.select(".node").append("foreignObject")
+      .attr("width", 150)
+      .attr("height", 150)
+      .append("xhtml:body")
+      .style("font", "14px 'Helvetica Neue'")
+      .html(msg);
+
+ 
+      // d3.select("text").transition()
+      // .text(msg)
+      // .attr("font-size", "12")
+      // .duration(500)
+      // .delay(0);
 
 
       d3.select(this).select(".innercircle").transition()
