@@ -16,7 +16,7 @@ var Bubble = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Bubble.drawBubbles(data.slice(0,30));
+    Bubble.drawBubbles(data.slice(0,28));
   },
 
   playIfShared: function(item){
@@ -63,30 +63,59 @@ var Bubble = {
     );
   },
 
+  // createHeaders : function(){
+  //   var $inputwidth = $('<input type="text"></input>');
+  //   var $inputheight = $('<input type="text"></input>');
+  //   var $inputbackgroundcolor = $('<input type="text"></input>');
+  //   var $inputthumbRadius = $('<input type="text"></input>');
+  //   var $inputcenterRadius = $('<input type="text"></input>');
+  //   var $inputstroke = $('<input type="text"></input>');
+
+  //   var $minCentralLinksStrength = $('<input type="text"></input>');
+  //   var $maxCentralLinksStrength = $('<input type="text"></input>');
+  //   var $htmlBoxWidth = $('<input type="text"></input>');
+  //   var $htmlBoxHeight = $('<input type="text"></input>');
+  //   var $htmlBoxX = $('<input type="text"></input>');
+  //   var $htmlBoxY = $('<input type="text"></input>');
+  //   var $htmlBoxFontSize = $('<input type="text"></input>');
+
+
+  // },
+
   drawBubbles : function (data){
     console.log('darwbubbles function');
 
     // console.log(data[1]);
 
     //parameters
-    var width = 960;  // need to make reponsive
+    var width = 700;  // need to make reponsive
     var height = 500;  // need to make reponsive
+    var backgroundcolor = "lavender";
     var thumbRadius = 40; // this is the radius on width of thumbnails
     var centerRadius = Math.min(width/2-thumbRadius, height/2-thumbRadius);
     var stroke = 5;
 
-    var gravity = 0.3;
+    var minCentralLinksStrength = 0;
+    var maxCentralLinksStrength = 0;
+    var htmlBoxWidth = 2*centerRadius*0.5;
+    var htmlBoxHeight = 2*centerRadius*0.5;
+    var htmlBoxX = -centerRadius*(0.5);
+    var htmlBoxY = -centerRadius*(0.5);
+    var htmlBoxFontSize = 16;
+
+
+    var gravity = 0.32;
     var distance = 50;
     var charge = -1000;
 
     var centralLinksDistance = function(){
-      return centerRadius * (1+Math.random());
+      return 2 * centerRadius * Math.random();
     };
     var distributedLinksDistance = function(){
       return thumbRadiusadius * 2;
     };
     var centralLinksStrength = function(){
-      return Math.max(Math.random(),0.5);
+      return Math.random() * (maxCentralLinksStrength - minCentralLinksStrength) + minCentralLinksStrength;
     };
     var distributedLinksStrength = function(){
       return 0.2;
@@ -95,7 +124,8 @@ var Bubble = {
     //main container
     var svg = d3.select("body").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .style("background-color","lavender");
 
     // var center = svg.append("circle")
     // .attr('cx', width/2)
@@ -139,21 +169,27 @@ var Bubble = {
 
       // start should be called again whenever the nodes and links change again
     force.nodes(data)
-    .links(centralLinks)
-    .linkDistance(function(link, index){
-      if (link.source.index === 0) {
-        return centralLinksDistance() ;
+    .charge(function(node){
+      if (node.index === 0) {
+        return 0;
       } else {
-        return distributedLinksDistance();
+        return charge;
       }
     })
-    .linkStrength(function(link, index){
-        if (link.source.index === 0) {
-          return centralLinksStrength();
-        } else {
-          return distributedLinksStrength();
-        }
-    })
+    // .linkDistance(function(link, index){
+    //   if (link.source.index === 0) {
+    //     return centralLinksDistance() ;
+    //   } else {
+    //     return distributedLinksDistance();
+    //   }
+    // })
+    // .linkStrength(function(link, index){
+    //     if (link.source.index === 0) {
+    //       return centralLinksStrength();
+    //     } else {
+    //       return distributedLinksStrength();
+    //     }
+    // })
     .start();
 
     /* uncomment to create links in DOM
@@ -179,12 +215,11 @@ var Bubble = {
       Photo: "green"
     };
 
-
     node.append("circle")
     .attr("class", "innercircle")
-    .style("stroke", function(d) { return d.index===0? "black" : networkColors[d.network];})
+    .style("stroke", function(d) { return d.index===0? "transparent" : networkColors[d.network];})
     .style("stroke-width", stroke)
-    .style("fill", function(d) {return d.index===0? "white" : "black";})
+    .style("fill", function(d) {return d.index===0? "transparent" : "black";})
     .attr("r", thumbRadius)
     .attr("cx", 0)
     .attr("cy", 0);
@@ -209,63 +244,86 @@ var Bubble = {
     .attr("height", thumbRadius*2);
 
  
-    // node.append('text')
-    // .attr()
-    // .attr("fill","black")
-    // .text(function(d){return d.index===0 ? "test" : "";});
 
     node.on("mouseenter", function() {
-
       // work on central circle
       d3.select("circle").transition()
       .attr("r", centerRadius)
+      .style("fill", "white")
       .style("z-index", 10)
-      .duration(500)
+      .duration(400)
       .delay(0);
+
+      force
+      .links(centralLinks)
+      .charge(function(node){
+        if (node.index === 0) {
+          return 10*charge;
+        } else {
+          return charge;
+        }
+      })
+      .linkDistance(function(link, index){
+        if (link.source.index === 0) {
+          return centerRadius * 1.1 ;
+        } else {
+          return distributedLinksDistance();
+        }
+      })
+      .linkStrength(function(link, index){
+          if (link.source.index === 0) {
+            return 1;
+          } else {
+            return distributedLinksStrength();
+          }
+      })
+      .start();
       
       // get text from moused enter
       d3.select(this).attr("text", function(d){return d.textHtml;});
-      var msg = d3.select(this).attr("text");
+      var msg = "<span class='t'>" + d3.select(this).attr("text") + "</span>";
+
+      console.log(msg);
 
       d3.select(".node").append("foreignObject")
-      .attr("width", 150)
-      .attr("height", 150)
+      .attr("class", "centralHtml")
+      .attr("width", htmlBoxWidth)
+      .attr("height", htmlBoxHeight)
+      .attr("x", htmlBoxX)
+      .attr("y",htmlBoxY)
       .append("xhtml:body")
-      .style("font", "14px 'Helvetica Neue'")
-      .html(msg);
-
- 
-      // d3.select("text").transition()
-      // .text(msg)
-      // .attr("font-size", "12")
-      // .duration(500)
-      // .delay(0);
+      .style("font", "1px 'Helvetica Neue'")
+      .html(msg)
+      .transition()
+      .style("font-size", "16px")
+      .duration(500)
+      .delay(0);
 
 
       d3.select(this).select(".innercircle").transition()
-      .attr("r", thumbRadius*1.5)
+      .attr("r", thumbRadius*3)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".clip").transition()
-      .attr("r", thumbRadius*1.5)
+      .attr("r", thumbRadius*3)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".clipcircle").transition()
-      .attr("r", thumbRadius*1.5)
+      .attr("r", thumbRadius*3)
       .style("z-index", 10)
       .duration(500)
       .delay(0);
 
       d3.select(this).select(".image").transition()
       .style("z-index", 10)
-      .attr("width", thumbRadius*2*1.5)
-      .attr("height", thumbRadius*2*1.5)
-      .attr("x",-thumbRadius*1.5)
-      .attr("y",-thumbRadius*1.5)
+      .attr("width", thumbRadius*2*3)
+      .attr("height", thumbRadius*2*3)
+      .attr("x",-thumbRadius*3)
+      .attr("y",-thumbRadius*3)
       .duration(500)
       .delay(0);
 
@@ -279,31 +337,61 @@ var Bubble = {
 
       d3.select("circle").transition()
       .attr("r", thumbRadius)
+      .style("fill", "transparent")
       .style("z-index", 5)
       .duration(500)
       .delay(0);
 
-      d3.select("text").transition()
-      .attr("font-size", "1")
-      .duration(500)
-      .delay(0);
+      force
+      .links([])
+      .charge(function(node){
+        if (node.index === 0) {
+          return 0;
+        } else {
+          return charge;
+        }
+      })
+      .linkDistance(function(link, index){
+        if (link.source.index === 0) {
+          return centralLinksDistance() ;
+        } else {
+          return distributedLinksDistance();
+        }
+      })
+      .linkStrength(function(link, index){
+          if (link.source.index === 0) {
+            return centralLinksStrength();
+          } else {
+            return distributedLinksStrength();
+          }
+      })
+      .start();
+
+      d3.selectAll(".centralHtml")
+      .transition()
+      .duration(400)
+      .attr("width", 0)
+      .attr("height", 0)
+      .style("font", "0px 'Helvetica Neue'")
+      .remove();
+
 
       d3.select(this).select(".innercircle").transition()
       .style("z-index", 5)
       .attr("r", thumbRadius)
-      .duration(1000)
+      .duration(500)
       .delay(10);
 
       d3.select(this).select(".clip").transition()
       .style("z-index", 5)
        .attr("r", thumbRadius)
-      .duration(1000)
+      .duration(500)
       .delay(10);
 
       d3.select(this).select(".clipcircle").transition()
       .style("z-index", 5)
       .attr("r", thumbRadius)
-      .duration(1000)
+      .duration(500)
       .delay(10);
 
       d3.select(this).select(".image").transition()
@@ -312,13 +400,9 @@ var Bubble = {
       .attr("height", 100)
       .attr("x",-50)
       .attr("y",-50)
-      .duration(1000)
+      .duration(500)
       .delay(10);
 
-     // d3.select(this).append("text")
-     //   .attr("dx", -20)
-     //   .attr("dy", 30)
-     //   .text(function(d) { return d.contribName; } );
     });
 
 
