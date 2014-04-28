@@ -67,6 +67,20 @@ var Flyers = {
   drawFlyers : function (data){
     console.log('flyers function');
 
+    var $mainDiv = $('<div class="windy-demo"></div>');
+    Flyers.$container.append($mainDiv);
+
+    var $imgList = $('<ul id="wi-el" class="wi-container"></ul>');
+    $mainDiv.append($imgList);
+
+    for (var i = 0 ; i < data.length ; i++){
+      var $imgItem = $('<li></li>');
+      var photo = data[i].image || data[i].thumb || data[i].profilePic;
+      $imgItem.append($("<img />").attr({src: photo}));
+      $imgList.append($imgItem);
+    }
+
+// <li><img src="images/demo1/1.jpg" alt="image1"/><h4>Coco Loko</h4><p>Total bicycle rights in blog four loko raw denim ex, helvetica sapiente odio placeat.</p></li>
 
 
   }
