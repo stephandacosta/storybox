@@ -86,7 +86,13 @@ var Flyers = {
           .css("overflow","scroll")
       // .css("overflow", "hidden")
       // .css("text-overflow", "ellipsis"));
-);
+      );
+      $imgItem.css('z-index', 200-i);
+      if (i>=1){
+        // $imgItem.css('display', 'inline');
+        $imgItem.css('-webkit-transform', 'translateX(' + (200+(i-1)*50) + 'px) rotateY(-60deg)');
+        $imgItem.css('display', 'inline');
+      }
       $imgList.append($imgItem);
     }
     $navig = $("<nav>");
