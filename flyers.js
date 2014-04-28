@@ -79,8 +79,70 @@ var Flyers = {
       $imgItem.append($("<img />").attr({src: photo}));
       $imgList.append($imgItem);
     }
+    $navig = $("<nav>");
+    $mainDiv.append($navig);
+    $navig.append('<span id="nav-prev">prev</span>');
+    $navig.append('<span id="nav-next">next</span>');
+
 
 // <li><img src="images/demo1/1.jpg" alt="image1"/><h4>Coco Loko</h4><p>Total bicycle rights in blog four loko raw denim ex, helvetica sapiente odio placeat.</p></li>
+
+        var $el = $( '#wi-el' ),
+          windy = $el.windy(),
+          allownavnext = false,
+          allownavprev = false;
+
+        $( '#nav-prev' ).on( 'mousedown', function( event ) {
+
+          allownavprev = true;
+          navprev();
+        
+        } ).on( 'mouseup mouseleave', function( event ) {
+
+          allownavprev = false;
+        
+        } );
+
+        $( '#nav-next' ).on( 'mousedown', function( event ) {
+
+          allownavnext = true;
+          navnext();
+        
+        } ).on( 'mouseup mouseleave', function( event ) {
+
+          allownavnext = false;
+        
+        } );
+
+        function navnext() {
+          if( allownavnext ) {
+            windy.next();
+            setTimeout( function() {  
+              navnext();
+            }, 150 );
+          }
+        }
+        
+        function navprev() {
+          if( allownavprev ) {
+            windy.prev();
+            setTimeout( function() {  
+              navprev();
+            }, 150 );
+          }
+        }
+        /* example to add items
+        setTimeout(function(){
+          
+          $el.prepend('<li><img src="images/demo1/3.jpg" alt="image1"/><h4>Coco Loko</h4><p>Total bicycle rights in blog four loko raw denim ex, helvetica sapiente odio placeat.</p></li>');
+
+          // or:
+          // $el.append('<li><img src="images/demo1/3.jpg" alt="image1"/><h4>Coco Loko</h4><p>Total bicycle rights in blog four loko raw denim ex, helvetica sapiente odio placeat.</p></li>');
+          
+          windy.update();
+
+        },2000)
+        */
 
 
   }
