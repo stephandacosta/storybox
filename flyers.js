@@ -16,7 +16,7 @@ var Flyers = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Flyers.drawFlyers(data.slice(0,20));
+    Flyers.drawFlyers(data);
   },
 
   playIfShared: function(item){
@@ -74,9 +74,19 @@ var Flyers = {
     $mainDiv.append($imgList);
 
     for (var i = 0 ; i < data.length ; i++){
-      var $imgItem = $('<li></li>');
+      var $imgItem = $('<li></li>').css("height","100%");
       var photo = data[i].image || data[i].thumb || data[i].profilePic;
-      $imgItem.append($("<img />").attr({src: photo}));
+      var $img = $("<img />").attr({src: photo});
+      $imgItem.append($img);
+      $imgItem.append($("<h4>" + data[i].contribName + "</h4>"));
+      $imgItem.append($("<div></div>").html(data[i].textHtml)
+      // .css("white-space","nowrap")
+      // .css("width", "100%")  
+          .css("height", "70px") // this needs to be dynamic
+          .css("overflow","scroll")
+      // .css("overflow", "hidden")
+      // .css("text-overflow", "ellipsis"));
+);
       $imgList.append($imgItem);
     }
     $navig = $("<nav>");
