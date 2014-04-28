@@ -9,13 +9,10 @@
     <link rel="stylesheet" href="popup.less" type="text/less" />    
     <link rel="stylesheet" href="example.less" type="text/less" />
 
-    <!-- Add for flyers -->
-    <link rel="stylesheet" type="text/css" href="Windy/css/windy.css" />
-    <link rel="stylesheet" type="text/css" href="Windy/css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="Windy/css/style1.css" />
-    <script type="text/javascript" src="Windy/js/modernizr.custom.79639.js"></script>
-    <noscript><link rel="stylesheet" type="text/css" href="Windy/css/noJS.css" /></noscript>
-    <!-- Add for flyers -->
+    <!-- Add for flippers -->
+    <link rel="stylesheet" type="text/css" href="flippers.css" />
+
+    <!-- Add for flipers -->
 
     <!-- Script tags -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -116,10 +113,10 @@
     
     <script type="text/javascript" charset="utf-8" src="//vg-qaassets.s3.amazonaws.com/static/global/js/less-1.4.1.min.js"></script>
 
-    <!-- Need to add for flyers -->
-        <script type="text/javascript" src="Windy/js/jquery.windy.js"></script>
-    <script src="flyers.js"></script>
-    <!-- Need to add for flyers -->
+    <!-- Need to add for flippers -->
+
+    <script src="flippers.js"></script>
+    <!-- Need to add for flippers -->
 
     <script>
         sentimentHub = new VGSentimentHub(campaignUid, {
@@ -133,7 +130,7 @@
         $(function(){
             player.initPopup($("#playerBox_container"));
             
-            Flyers.init($(".gallery"));
+            Flippers.init($(".gallery"));
             //Example.init($(".gallery"));
         });
     </script>

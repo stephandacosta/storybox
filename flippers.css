@@ -1,0 +1,48 @@
+.cardcontainer {
+  float: left;
+}
+  .cardcontainer  .front {
+    width: 284px; height: 372px; padding: 20px;
+  }
+  .cardcontainer  .back {
+    width: 284px; height: 372px; padding: 20px;
+    -webkit-transform: rotateY(180deg);
+    background: #a3a3a3; 
+  }
+/*    .cardcontainer  .back h2 {
+      width: 287px; height: 42px; margin: 0 auto 20px auto;
+      text-indent: -9999px; 
+    }*/
+    .cardcontainer  img {
+      float: right;
+    }
+    .cardcontainer  div {
+/*      float: left; width: 185px; margin: 0 0 20px 0;*/
+      font-size: 17px; line-height: 28px; color: #4c4c4c; 
+    }
+
+    .cardcontainer {
+  width: 324px; height: 412px;
+  -webkit-perspective: 1000;
+}
+
+.card {
+  width: 324px; height: 412px;
+  border: 8px solid #fff; 
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: 0.5s;
+}
+
+.cardcontainer:hover .card {
+  -webkit-transform: rotateY(180deg);       
+}
+
+.face {
+position: absolute;
+-webkit-backface-visibility: hidden;
+}
+
+.back {
+position: absolute;
+-webkit-backface-visibility: hidden;
+}
