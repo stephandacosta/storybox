@@ -108,10 +108,10 @@
     
     <script type="text/javascript" charset="utf-8" src="//vg-qaassets.s3.amazonaws.com/static/global/js/less-1.4.1.min.js"></script>
 
-    <!-- Need to add for bubbles -->
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="bubbles.js"></script>
-    <!-- Need to add for bubbles -->
+    <!-- Need to add for flyers -->
+
+    <script src="flyers.js"></script>
+    <!-- Need to add for flyers -->
 
     <script>
         sentimentHub = new VGSentimentHub(campaignUid, {
@@ -125,7 +125,7 @@
         $(function(){
             player.initPopup($("#playerBox_container"));
             
-            Bubble.init($(".gallery"));
+            Flyers.init($(".gallery"));
             //Example.init($(".gallery"));
         });
     </script>
