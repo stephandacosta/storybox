@@ -1,48 +1,88 @@
+.flippers{
+  margin: auto;
+  background-color: black;
+}
+
+
+
+
 .cardcontainer {
   float: left;
+  border-style:solid;
+  border-color:#fff; 
+/*  width:20%;
+  height: 25%;*/
+  -webkit-perspective: 1000;
 }
   .cardcontainer  .front {
-    width: 284px; height: 372px; padding: 20px;
+    width: 100%; height: 100%;
   }
   .cardcontainer  .back {
-    width: 284px; height: 372px; padding: 20px;
+/*    width: 100%; height: 100%;*/
     -webkit-transform: rotateY(180deg);
-    background: #a3a3a3; 
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-backface-visibility: hidden;
   }
 /*    .cardcontainer  .back h2 {
       width: 287px; height: 42px; margin: 0 auto 20px auto;
       text-indent: -9999px; 
     }*/
     .cardcontainer  img {
-      float: right;
+      display:block;
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
     }
     .cardcontainer  div {
 /*      float: left; width: 185px; margin: 0 0 20px 0;*/
       font-size: 17px; line-height: 28px; color: #4c4c4c; 
     }
 
-    .cardcontainer {
+/*    .cardcontainer {
   width: 324px; height: 412px;
   -webkit-perspective: 1000;
-}
+}*/
 
 .card {
-  width: 324px; height: 412px;
-  border: 8px solid #fff; 
+  width: 100%; height: 100%;
+
   -webkit-transform-style: preserve-3d;
   -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -transition: 0.5s;
 }
 
+
+
+
 .cardcontainer:hover .card {
-  -webkit-transform: rotateY(180deg);       
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  transform: rotateY(180deg);
 }
 
 .face {
 position: absolute;
 -webkit-backface-visibility: hidden;
+-moz-webkit-backface-visibility: hidden;
+backface-visibility: hidden; 
+/*need to implement option for earlier browsers*/
 }
 
+
+
 .back {
-position: absolute;
--webkit-backface-visibility: hidden;
+  position:absolute;
+  background-color: lavender; 
 }
+
+/*.cardcontainer:hover .back{
+  z-index:9000;
+}*/

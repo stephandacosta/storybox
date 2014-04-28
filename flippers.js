@@ -67,33 +67,49 @@ var Flippers = {
   drawFlippers : function (data){
     console.log('flippers function');
 
+    height=600;
+    width=1200;
+    margin=2;
+    border = 8;
+
     var $mainDiv = $('<div class="flippers"></div>');
+    $mainDiv.css('width', width);
+    $mainDiv.css('height', height);
     Flippers.$container.append($mainDiv);
 
-    for (var i = 0; i<5 ; i++){
+    for (var i = 0; i<20 ; i++){
       var $cardContainer = $('<div class="cardcontainer"></div>');
+      $cardContainer.css('width', (width)/5 - 2*border - 2*margin);
+      $cardContainer.css('height', (height)/4 - 2*border - 2*margin);
+      $cardContainer.css('border-width', border);
+      $cardContainer.css('margin', margin);
       var $card=$('<div class="card"></div>');
       var $front = $('<div class="face front"></div>');
       var $back = $('<div class="face back"></div>');
 
+      // $cardContainer.on('hover', function(){
+      //    var top=$(this).find('.back').offset().top;
+      //    var left=$(this).find('.back').offset().left;
+      //    console.log('top:',top,', left:', left);
+      //    $(this).find('.back').css('top', top);
+      //    $(this).find('.back').css('left', left);
+      //    $(this).find('.back').css('position', 'absolute');
+      //    $(this).find('.back').css('z-index', 1000);
+      // });
+
       $card.append($front);
       $card.append($back);
       $cardContainer.append($card);
+      $mainDiv.append($cardContainer);
 
       var photo = data[i].image || data[i].thumb || data[i].profilePic;
       $front.append(photo? $("<img />").attr({src: photo}) : '');
 
       $back.append($("<h4>" + data[i].contribName + "</h4>"));
       $back.append($("<div></div>").html(data[i].textHtml)
-      // .css("white-space","nowrap")
-      // .css("width", "100%")  
-          // .css("height", "70px") // this needs to be dynamic
           .css("overflow","scroll")
-      // .css("overflow", "hidden")
-      // .css("text-overflow", "ellipsis"));
       );
 
-      Flippers.$container.append($cardContainer);
 
 
 
