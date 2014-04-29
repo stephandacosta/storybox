@@ -16,7 +16,7 @@ var Flippers = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Flippers.drawFlippers(data);
+    Flippers.drawFlippers(data.slice(0,40));
   },
 
   playIfShared: function(item){
@@ -78,7 +78,7 @@ var Flippers = {
     Flippers.$container.append($mainDiv);
 
     var $thumbsContainer = $('<div id="thumbsContainer"></div>');
-    $thumbsContainer.css("width", '2005px');
+    $thumbsContainer.css("width", '5005px');
     $mainDiv.append($thumbsContainer);
 
     for (var i = 0; i<data.length ; i++){
@@ -110,9 +110,9 @@ var Flippers = {
       $front.append(photo? $("<img />").attr({src: photo}) : '');
 
       $back.append($("<h4>" + data[i].contribName + "</h4>"));
-      $back.append($("<div></div>").html(data[i].textHtml)
-          .css("overflow","scroll")
-      );
+      // $back.append($("<div></div>").html(data[i].textHtml)
+      //     .css("overflow","scroll")
+      // );
 
     }
 
