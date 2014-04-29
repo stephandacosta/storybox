@@ -1,19 +1,40 @@
-.flippers{
-  margin: auto;
+#thumbsWrapper{
+  /*margin: auto;*/
   background-color: black;
+  position: absolute;
+  width:100%;
+  height:500px;
+  overflow-y:hidden;
+  top:0;
+  left:0;
+  border-top:2px solid #000;
 }
 
 
+#thumbsContainer{
+    height:400px;
+    display:block;
+    margin: 0;
+}
 
 
 .cardcontainer {
+  height:75px;
+  width: 100px;
+  display:block;
+  margin: 2px;
+  cursor:pointer;
+  /*opacity:0.4;*/
   float: left;
+/*  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=40);*/
   border-style:solid;
   border-color:#fff; 
 /*  width:20%;
   height: 25%;*/
   -webkit-perspective: 1000;
 }
+
+
   .cardcontainer  .front {
     width: 100%; height: 100%;
   }
