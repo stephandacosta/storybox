@@ -43,7 +43,7 @@ var Flippers = {
     var cardMargin = 2;
     var cardBorder = 8;
     var cardWidth = cardInnerWidth+2*cardMargin+2*cardBorder;
-    var thumbCount = Math.floor(window.innerWidth/cardWidth)-2;
+    var thumbCount = Math.floor(window.innerWidth/cardWidth)-3;
 
     for (var i = 0; i<data.length ; i++){
 
@@ -56,7 +56,7 @@ var Flippers = {
         $cardContainer.css('display', 'none');
         $cardContainer.addClass('hiddenleft');
       } else {
-        $cardContainer.css('left', cardWidth * i);
+        $cardContainer.css('left', cardWidth * (thumbCount-i));
       }
 
       //construct card
@@ -86,7 +86,7 @@ var Flippers = {
     $navig.append($navPrev);
     $navig.append($navNext);
     $navPrev.on('click', function(){
-      slideLeft();
+      slideLeft(cardWidth, thumbCount);
     });
     $navNext.on('click', function(){
       slideRight();
@@ -138,19 +138,41 @@ var Flippers = {
       });
   };
 
-  var slideRight = function($container){
+  var slideRight = function(cardWidth){
     //move visible cards right
-    $( ".cardcontainer" ).not('.hiddenleft').animate({
+    $( ".cardcontainer" ).filter(":visible").animate({
       left: "+=360"
     }, {
       duration: 200, 
       easing: "swing"
     });
+    //hide 3 cards out
+    $( ".cardcontainer" ).not('.hiddenright').filter(":visible").last().addClass('hiddenright').slideUp(100);
+    $( ".cardcontainer" ).not('.hiddenright').filter(":visible").last().addClass('hiddenright').slideUp(200);
+    $( ".cardcontainer" ).not('.hiddenright').filter(":visible").last().addClass('hiddenright').slideUp(300);
     //slide 3 hidden cards down
-    $('.hiddenleft').first().css('left',0).slideDown(600).removeClass('hiddenleft');
-    $('.hiddenleft').first().css('left',120).slideDown(400).removeClass('hiddenleft');
-    $('.hiddenleft').first().css('left',240).slideDown(200).removeClass('hiddenleft');
+    $('.hiddenleft').last().css('left',240).slideDown(200).removeClass('hiddenleft');
+    $('.hiddenleft').last().css('left',120).slideDown(400).removeClass('hiddenleft');
+    $('.hiddenleft').last().css('left',0).slideDown(600).removeClass('hiddenleft');
+  };
 
+  var slideLeft = function(cardWidth, thumbCount){
+    //hide 3 cards out
+    $( ".cardcontainer" ).not('.hiddenleft').filter(":visible").first().addClass('hiddenleft').slideUp(100);
+    $( ".cardcontainer" ).not('.hiddenleft').filter(":visible").first().addClass('hiddenleft').slideUp(200);
+    $( ".cardcontainer" ).not('.hiddenleft').filter(":visible").first().addClass('hiddenleft').slideUp(300);
+    //move visible cards left
+    $( ".cardcontainer" ).filter(":visible").animate({
+      left: "-=360"
+    }, {
+      duration: 200, 
+      easing: "swing"
+    });
+    //slide 3 hidden cards down
+    console.log('should slide down');
+    $('.hiddenright').first().css('left', (thumbCount-2)*120).removeClass('hiddenright').slideDown(200);
+    $('.hiddenright').first().css('left',(thumbCount-1)*120).removeClass('hiddenright').slideDown(400);
+    $('.hiddenright').first().css('left',(thumbCount)*120).removeClass('hiddenright').slideDown(600);
   };
 
 
