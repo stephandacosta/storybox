@@ -1,7 +1,6 @@
 #thumbsWrapper{
-  /*margin: auto;*/
   background-color: black;
-  position: absolute;
+  position: relative;
   width:100%;
   height:100px;
   overflow-y:hidden;
@@ -12,6 +11,7 @@
 
 
 #thumbsContainer{
+    width: 100%;
     height:98px;
     display:block;
     margin: 0;
@@ -20,12 +20,13 @@
 
 .cardcontainer {
   height:75px;
-  width: 100px;
+  /*width: 100px;*/
   display:block;
-  margin: 2px;
+  /*margin: 2px;*/
   cursor:pointer;
   /*opacity:0.4;*/
-  float: left;
+  /*float: left;*/
+  position: absolute;
 /*  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=40);*/
   border-style:solid;
   border-color:#fff; 

@@ -20,153 +20,137 @@ var Flippers = {
   },
 
   playIfShared: function(item){
-    var contentId = $.cookie("vgvidid");
-    if (contentId && item.id == contentId){
-      ga_events.sboxShareReferral(item.network, item.id);
-      if (item.type != 'video'){
-        player.hidePlayerMessage();
-        player.play(item);
-        ga_events.shareReferral('content:'+item.network, item.id);
-        $.cookie("vgvidid", '', {
-          expires: 0,
-          domain: cookieDomain,
-          path: '/'
-        });
-      }
-    }
+
   },
 
   // draw the items as desired
   drawItem: function(network, item){
-    // For this example I am creating a separate network div for each network data and
-    // append the items to the network div...
-    console.log('network', network);
-    var $networkDiv = $("."+network, Example.$container);
-    if ($networkDiv.length < 1) {
-      $networkDiv = $("<div></div>").addClass("network").addClass(network)
-      .append($("<h2></h2>").html(network))
-      .appendTo(Example.$container);
-    }
 
-    console.log("Item:", item);
-
-    // create a div and attach the raw item data so we can use it to open the player popup on click
-    var photo = item.image || item.thumb || item.profilePic;
-    $networkDiv.append(
-      $("<div></div>").addClass("item") 
-      .append(photo? $("<img />").attr({src: photo}) : '')
-      .append($("<div></div>").addClass("info").html(item.text))
-      .click(function(){
-        player.play(item);
-      })
-      .data({item: item})
-    );
   },
 
 
   drawFlippers : function (data){
     console.log('flippers function');
 
-    // height=600;
-    // width=1200;
-    margin=2;
-    border = 8;
-
     var $mainDiv = $('<div id="thumbsWrapper"></div>');
-    // $mainDiv.css('width', width);
-    // $mainDiv.css('height', height);
+    $mainDiv.css('width', window.innerWidth);
     Flippers.$container.append($mainDiv);
-
     var $thumbsContainer = $('<div id="thumbsContainer"></div>');
-    $thumbsContainer.css("width", '5005px');
     $mainDiv.append($thumbsContainer);
 
+    // card dimensions
+    var cardInnerWidth = 100;
+    var cardMargin = 2;
+    var cardBorder = 8;
+    var cardWidth = cardInnerWidth+2*cardMargin+2*cardBorder;
+    var thumbCount = Math.floor(window.innerWidth/cardWidth)-2;
+
     for (var i = 0; i<data.length ; i++){
+
+      //construct card container
       var $cardContainer = $('<div class="cardcontainer"></div>');
-      // $cardContainer.css('width', (width)/5 - 2*border - 2*margin);
-      // $cardContainer.css('height', (height)/4 - 2*border - 2*margin);
-      $cardContainer.css('border-width', border);
-      $cardContainer.css('margin', margin);
+      $cardContainer.css('width', cardInnerWidth);
+      $cardContainer.css('border-width', cardBorder);
+      $cardContainer.css('margin', cardMargin);
+      if (i > thumbCount){
+        $cardContainer.css('display', 'none');
+        $cardContainer.addClass('hiddenleft');
+      } else {
+        $cardContainer.css('left', cardWidth * i);
+      }
+
+      //construct card
       var $card=$('<div class="card"></div>');
       var $front = $('<div class="face front"></div>');
-      var $back = $('<div class="face back"></div>');
-
-      // $cardContainer.on('hover', function(){
-      //    var top=$(this).find('.back').offset().top;
-      //    var left=$(this).find('.back').offset().left;
-      //    console.log('top:',top,', left:', left);
-      //    $(this).find('.back').css('top', top);
-      //    $(this).find('.back').css('left', left);
-      //    $(this).find('.back').css('position', 'absolute');
-      //    $(this).find('.back').css('z-index', 1000);
-      // });
-
-      $card.append($front);
-      $card.append($back);
-      $cardContainer.append($card);
-      $thumbsContainer.append($cardContainer);
-
       var photo = data[i].image || data[i].thumb || data[i].profilePic;
       $front.append(photo? $("<img />").attr({src: photo}) : '');
-
+      var $back = $('<div class="face back"></div>');
       $back.append($("<h4>" + data[i].contribName + "</h4>"));
       // $back.append($("<div></div>").html(data[i].textHtml)
       //     .css("overflow","scroll")
       // );
 
+      //build card
+      $card.append($front);
+      $card.append($back);
+      $cardContainer.append($card);
+      $thumbsContainer.prepend($cardContainer);
+
     }
 
-      var $navig = $("<nav>");
-      $('body').append($navig);
-      var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
-      var $navNext = $('<button type="button" id="nav-next">next</span>');
-      $navig.append($navPrev);
-      $navig.append($navNext);
+    // put navigation button (temporary)
+    var $navig = $("<nav>");
+    $('body').append($navig);
+    var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
+    var $navNext = $('<button type="button" id="nav-next">next</span>');
+    $navig.append($navPrev);
+    $navig.append($navNext);
+    $navPrev.on('click', function(){
+      slideLeft();
+    });
+    $navNext.on('click', function(){
+      slideRight();
+    });
 
-      $navNext.on('click', Flippers.moveRight);
+    // execute scroll on mouse move
+    makeScrollable($mainDiv,$thumbsContainer,15);
+
+  }
+
+};
 
 
 // this is testing need to refactor a lot
            //Get our elements for faster access and set overlay width
-      function makeScrollable($wrapper, $container, contPadding){
-          //Get menu width
-          var divWidth = $wrapper.width();
-       
-          //Remove scrollbars
-          // $wrapper.css({
-          //     overflow: 'hidden'
-          // });
-       
-          //Find last image container
-          var lastLi = $container.find('div:last-child'); // CHECK IF NEED TOCHANGE TO DIV FOR THE CARDCONTAINER
-          $wrapper.scrollLeft(0);
-          //When user move mouse over menu
-          $wrapper.unbind('mousemove').bind('mousemove',function(e){
-            console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
-              //As images are loaded ul width increases,
-              //so we recalculate it each time
-              var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + contPadding;
-       
+  var makeScrollable = function ($wrapper, $container, contPadding){
 
-              if (e.pageX > divWidth/4){
-                var left = (e.pageX - $wrapper.offset().left) * (divWidth - ulWidth) / divWidth - divWidth/4;
-              } else {
-                var left = 0;
-              }
+      var divWidth = $wrapper.width();
+   
+      //Remove scrollbars
+      // $wrapper.css({
+      //     overflow: 'hidden'
+      // });
 
-              $wrapper.scrollLeft(left);
-          });
-      }
-// this is testing need to refactor a lot
+      $wrapper.scrollLeft(0);
 
-     makeScrollable($mainDiv,$thumbsContainer,15);
+      //When user move mouse over menu
+      $wrapper.unbind('mousemove').bind('mousemove',function(e){
+        // console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
+          //As images are loaded ul width increases,
+          //so we recalculate it each time
+          // var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + contPadding;
+   
 
-  },
+          // if (e.clientX > window.innerWidth*0.75){
+          //   $('.cardcontainer:visible').first().slideUp(function(){
+          //     $('.hiddenright').first().slideDown().removeClass('hiddenright');
+          //   }).addClass('hiddenleft');
+          // }
 
-  moveRight: function(){
-    console.log('moving right');
-    $(".cardcontainer").css('-webkit-transform', 'translateX('+((width)/5 + 2*border + 2*margin) +'px)');
-    $(".cardcontainer").css('-webkit-transition', '2s');
-  }
+          // if (e.clientX < window.innerWidth*0.25){
+          //   $('.cardcontainer:visible').last().slideUp(function(){
+          //     $('.hiddenleft').last().slideDown().removeClass('hiddenleft');
+          //   }).addClass('hiddenright');
+          // }
 
-};
+          // $wrapper.scrollLeft(left);
+          // slideUpFirst(left);
+      });
+  };
+
+  var slideRight = function($container){
+    //move visible cards right
+    $( ".cardcontainer" ).not('.hiddenleft').animate({
+      left: "+=360"
+    }, {
+      duration: 200, 
+      easing: "swing"
+    });
+    //slide 3 hidden cards down
+    $('.hiddenleft').first().css('left',0).slideDown(600).removeClass('hiddenleft');
+    $('.hiddenleft').first().css('left',120).slideDown(400).removeClass('hiddenleft');
+    $('.hiddenleft').first().css('left',240).slideDown(200).removeClass('hiddenleft');
+
+  };
+
+
