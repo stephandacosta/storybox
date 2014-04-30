@@ -93,7 +93,7 @@ var Flippers = {
     });
 
     // execute scroll on mouse move
-    makeScrollable($mainDiv,$thumbsContainer,15);
+    makeScrollable($mainDiv,$thumbsContainer,15, cardWidth, thumbCount);
 
   }
 
@@ -102,17 +102,14 @@ var Flippers = {
 
 // this is testing need to refactor a lot
            //Get our elements for faster access and set overlay width
-  var makeScrollable = function ($wrapper, $container, contPadding){
+  var makeScrollable = function ($wrapper, $container, contPadding, cardWidth, thumbCount){
 
       var divWidth = $wrapper.width();
-   
-      //Remove scrollbars
-      // $wrapper.css({
-      //     overflow: 'hidden'
-      // });
 
       $wrapper.scrollLeft(0);
 
+
+      var mouseEnabled = true;
       //When user move mouse over menu
       $wrapper.unbind('mousemove').bind('mousemove',function(e){
         // console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
@@ -121,17 +118,29 @@ var Flippers = {
           // var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + contPadding;
    
 
-          // if (e.clientX > window.innerWidth*0.75){
-          //   $('.cardcontainer:visible').first().slideUp(function(){
-          //     $('.hiddenright').first().slideDown().removeClass('hiddenright');
-          //   }).addClass('hiddenleft');
-          // }
+          if (e.clientX > window.innerWidth*0.75){
+            if (mouseEnabled){
+              $wrapper.unbind('mousemove');
+              setTimeout(function(){
+                mouseEnabled = true;
+                makeScrollable($wrapper, $container, contPadding, cardWidth, thumbCount);
+              },600);
+              mouseEnabled = false;
+              slideRight(cardWidth, thumbCount);
+            }
+          }
 
-          // if (e.clientX < window.innerWidth*0.25){
-          //   $('.cardcontainer:visible').last().slideUp(function(){
-          //     $('.hiddenleft').last().slideDown().removeClass('hiddenleft');
-          //   }).addClass('hiddenright');
-          // }
+          if (e.clientX < window.innerWidth*0.25){
+            if (mouseEnabled){
+              $wrapper.unbind('mousemove');
+              setTimeout(function(){
+                mouseEnabled = true;
+                makeScrollable($wrapper, $container, contPadding, cardWidth, thumbCount);
+              },600);
+              mouseEnabled = false;
+              slideLeft(cardWidth, thumbCount);
+            }
+          }
 
           // $wrapper.scrollLeft(left);
           // slideUpFirst(left);
