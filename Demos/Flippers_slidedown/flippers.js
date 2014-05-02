@@ -1,11 +1,11 @@
-var Flippers = {
+var Flippers_sd = {
   $container: $("body"),
 
   init: function($container){
     console.log('creating flipping images');
-    Flippers.$container = $container;
-    sentimentHub.on('Data', Flippers.onData);
-    sentimentHub.on('Done', Flippers.onDataDone);
+    Flippers_sd.$container = $container;
+    sentimentHub.on('Data', Flippers_sd.onData);
+    sentimentHub.on('Done', Flippers_sd.onDataDone);
     sentimentHub.fetch();
   },
 
@@ -16,7 +16,7 @@ var Flippers = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Flippers.drawFlippers(data.slice(0,40));
+    Flippers_sd.drawFlippers(data.slice(0,40));
   },
 
   playIfShared: function(item){
@@ -34,7 +34,7 @@ var Flippers = {
 
     var $mainDiv = $('<div id="thumbsWrapper"></div>');
     $mainDiv.css('width', window.innerWidth);
-    Flippers.$container.append($mainDiv);
+    Flippers_sd.$container.append($mainDiv);
     var $thumbsContainer = $('<div id="thumbsContainer"></div>');
     $mainDiv.append($thumbsContainer);
 
@@ -79,18 +79,18 @@ var Flippers = {
     }
 
     // put navigation button (temporary)
-    var $navig = $("<nav>");
-    $('body').append($navig);
-    var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
-    var $navNext = $('<button type="button" id="nav-next">next</span>');
-    $navig.append($navPrev);
-    $navig.append($navNext);
-    $navPrev.on('click', function(){
-      slideLeft(cardWidth, thumbCount);
-    });
-    $navNext.on('click', function(){
-      slideRight();
-    });
+    // var $navig = $("<nav>");
+    // $('body').append($navig);
+    // var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
+    // var $navNext = $('<button type="button" id="nav-next">next</span>');
+    // $navig.append($navPrev);
+    // $navig.append($navNext);
+    // $navPrev.on('click', function(){
+    //   slideLeft(cardWidth, thumbCount);
+    // });
+    // $navNext.on('click', function(){
+    //   slideRight();
+    // });
 
     // execute scroll on mouse move
     makeScrollable($mainDiv,$thumbsContainer,15, cardWidth, thumbCount);

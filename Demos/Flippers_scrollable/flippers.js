@@ -1,11 +1,11 @@
-var Flippers = {
+var Flippers_scroll = {
   $container: $("body"),
 
   init: function($container){
     console.log('creating flipping images');
-    Flippers.$container = $container;
-    sentimentHub.on('Data', Flippers.onData);
-    sentimentHub.on('Done', Flippers.onDataDone);
+    Flippers_scroll.$container = $container;
+    sentimentHub.on('Data', Flippers_scroll.onData);
+    sentimentHub.on('Done', Flippers_scroll.onDataDone);
     sentimentHub.fetch();
   },
 
@@ -16,7 +16,7 @@ var Flippers = {
 
   // Triggered when we are done fetching data
   onDataDone: function(data){
-    Flippers.drawFlippers(data);
+    Flippers_scroll.drawFlippers(data);
   },
 
   playIfShared: function(item){
@@ -75,7 +75,7 @@ var Flippers = {
     var $mainDiv = $('<div id="thumbsWrapper"></div>');
     // $mainDiv.css('width', width);
     // $mainDiv.css('height', height);
-    Flippers.$container.append($mainDiv);
+    Flippers_scroll.$container.append($mainDiv);
 
     var $thumbsContainer = $('<div id="thumbsContainer"></div>');
     $thumbsContainer.css("width", '2005px');
@@ -116,14 +116,14 @@ var Flippers = {
 
     }
 
-      var $navig = $("<nav>");
-      $('body').append($navig);
-      var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
-      var $navNext = $('<button type="button" id="nav-next">next</span>');
-      $navig.append($navPrev);
-      $navig.append($navNext);
+      // var $navig = $("<nav>");
+      // $('body').append($navig);
+      // var $navPrev = $('<button type="button" id="nav-prev">prev</span>');
+      // var $navNext = $('<button type="button" id="nav-next">next</span>');
+      // $navig.append($navPrev);
+      // $navig.append($navNext);
 
-      $navNext.on('click', Flippers.moveRight);
+      // $navNext.on('click', Flippers_scroll.moveRight);
 
 
 // this is testing need to refactor a lot
@@ -142,7 +142,7 @@ var Flippers = {
           $wrapper.scrollLeft(0);
           //When user move mouse over menu
           $wrapper.unbind('mousemove').bind('mousemove',function(e){
-            console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
+            // console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
               //As images are loaded ul width increases,
               //so we recalculate it each time
               var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + contPadding;
