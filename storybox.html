@@ -108,6 +108,7 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="Demos/Accordion/fisheye_plugin.js"></script>
     <script src="Demos/Accordion/Accordion.js"></script>
+    <script src="Demos/Bubbles/Bubbles.js"></script>
     <script src="example.js"></script>
     
     <script type="text/javascript" charset="utf-8" src="//vg-qaassets.s3.amazonaws.com/static/global/js/less-1.4.1.min.js"></script>
@@ -124,7 +125,8 @@
         $(function(){
             player.initPopup($("#playerBox_container"));
             
-            Accordion.init($(".gallery"));
+            Accordion.init($('#accordionDiv'));
+            Bubble.init($('bubbleDiv'));
             // Example.init($(".gallery"));
         });
     </script>
@@ -132,10 +134,16 @@
 <body>
 
     <!-- Accordion is rendered here -->
+    <h1> Accordion </h1>
     <div id="accordionDiv" class="accordion" style="width:100%">
-      <ul id="accordion" style="position:relative;">
-      </ul>
     </div>
+
+
+    <h1> Bubbles </h1>
+    <div id="bubbleDiv" class="bubble" style="width:100%">
+    </div>
+
+
 
     <div class="gallery">
         <!-- Gallery is rendered here -->

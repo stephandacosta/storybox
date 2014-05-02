@@ -122,7 +122,7 @@ var Bubble = {
     };
 
     //main container
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select('#bubbleDiv').append("svg")
     .attr("width", width)
     .attr("height", height)
     .style("background-color","lavender");
@@ -283,8 +283,6 @@ var Bubble = {
       d3.select(this).attr("text", function(d){return d.textHtml;});
       var msg = "<span class='t'>" + d3.select(this).attr("text") + "</span>";
 
-      console.log(msg);
-
       d3.select(".node").append("foreignObject")
       .attr("class", "centralHtml")
       .attr("width", htmlBoxWidth)
@@ -422,7 +420,6 @@ var Bubble = {
 
     // time interval to enable continuous movement
     setInterval(function(){
-      console.log("moving");
       // force.alpha(0.1);
       node.attr("x", function(d){return d.x+Math.random()*5;})
       .attr("y", function(d){

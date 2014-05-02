@@ -9,6 +9,7 @@ var Accordion = {
 
   init: function($container){
     Accordion.$container = $container;
+    Accordion.$container.append($('<ul id="accordion" style="position:relative;"></ul>'));
     sentimentHub.on('Data', Accordion.onData);
     sentimentHub.on('Done', Accordion.onDataDone);
     sentimentHub.fetch();
@@ -114,8 +115,6 @@ var Accordion = {
     // put elements together
     $listItem.append($canvas);
     $listItem.append($textDiv);
-
-
 
     $("#accordion").append($listItem);
 
