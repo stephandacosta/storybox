@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="comp_player.less" type="text/less" />    
     <link rel="stylesheet" href="popup.less" type="text/less" />    
     <link rel="stylesheet" href="example.less" type="text/less" />
+    <link rel="stylesheet" href="Demos/Accordion/Accordion.less" type="text/less" />
 
     <!-- Script tags -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -103,7 +104,10 @@
     <script src="//vg-qaassets.s3.amazonaws.com/static/campaign/external/js/modules.v1.js"></script>
     <script src="//vg-qaassets.s3.amazonaws.com/static/campaign/external/js/sentimenthub.v1.js"></script>
     <script src="//vg-qaassets.s3.amazonaws.com/static/campaign/external/js/player.v1.js"></script>
-    
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="Demos/Accordion/fisheye_plugin.js"></script>
+    <script src="Demos/Accordion/Accordion.js"></script>
     <script src="example.js"></script>
     
     <script type="text/javascript" charset="utf-8" src="//vg-qaassets.s3.amazonaws.com/static/global/js/less-1.4.1.min.js"></script>
@@ -120,11 +124,19 @@
         $(function(){
             player.initPopup($("#playerBox_container"));
             
-            Example.init($(".gallery"));
+            Accordion.init($(".gallery"));
+            // Example.init($(".gallery"));
         });
     </script>
 </head>
 <body>
+
+    <!-- Accordion is rendered here -->
+    <div id="accordionDiv" class="accordion" style="width:100%">
+      <ul id="accordion" style="position:relative;">
+      </ul>
+    </div>
+
     <div class="gallery">
         <!-- Gallery is rendered here -->
     </div>

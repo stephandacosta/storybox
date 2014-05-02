@@ -5,13 +5,10 @@ var Accordion = {
   imgWidth: 300,
   imgHeight: 200,
   minImgWidth: 40,
-  // imgCount : function(){return (Accordion.Width() / Accordion.minImgWidth);}(),
   imgCounter : 0,
 
   init: function($container){
     Accordion.$container = $container;
-    //console.log("Accordion.$container");
-    
     sentimentHub.on('Data', Accordion.onData);
     sentimentHub.on('Done', Accordion.onDataDone);
     sentimentHub.fetch();
@@ -22,7 +19,7 @@ var Accordion = {
   onData: function(network, data){
 
     var imgCount = Accordion.Width / Accordion.minImgWidth;
-    console.log('Accordion.imgCounter', Accordion.imgCounter, 'imgCount', imgCount);
+
     $.each(data, function(key, item){
       // if (Accordion.imgCounter < imgCount){
             Accordion.imgCounter++;
