@@ -63,29 +63,10 @@ var Bubble = {
     );
   },
 
-  // createHeaders : function(){
-  //   var $inputwidth = $('<input type="text"></input>');
-  //   var $inputheight = $('<input type="text"></input>');
-  //   var $inputbackgroundcolor = $('<input type="text"></input>');
-  //   var $inputthumbRadius = $('<input type="text"></input>');
-  //   var $inputcenterRadius = $('<input type="text"></input>');
-  //   var $inputstroke = $('<input type="text"></input>');
-
-  //   var $minCentralLinksStrength = $('<input type="text"></input>');
-  //   var $maxCentralLinksStrength = $('<input type="text"></input>');
-  //   var $htmlBoxWidth = $('<input type="text"></input>');
-  //   var $htmlBoxHeight = $('<input type="text"></input>');
-  //   var $htmlBoxX = $('<input type="text"></input>');
-  //   var $htmlBoxY = $('<input type="text"></input>');
-  //   var $htmlBoxFontSize = $('<input type="text"></input>');
-
-
-  // },
 
   drawBubbles : function (data){
     console.log('darwbubbles function');
 
-    // console.log(data[1]);
 
     //parameters
     var width = 700;  // need to make reponsive
@@ -127,6 +108,7 @@ var Bubble = {
     .attr("height", height)
     .style("background-color","lavender");
 
+    // uncomment to add central cicle (for brand logo etc)
     // var center = svg.append("circle")
     // .attr('cx', width/2)
     // .attr('cy', height/2)
@@ -176,6 +158,7 @@ var Bubble = {
         return charge;
       }
     })
+    // uncomment to create central circle for brand logo fo instance
     // .linkDistance(function(link, index){
     //   if (link.source.index === 0) {
     //     return centralLinksDistance() ;
@@ -192,7 +175,7 @@ var Bubble = {
     // })
     .start();
 
-    /* uncomment to create links in DOM
+    /* uncomment to create visible links in DOM
     var link = svg.selectAll(".link")
     .data(centralLinks)
     .enter().append("line")
@@ -283,13 +266,16 @@ var Bubble = {
       d3.select(this).attr("text", function(d){return d.textHtml;});
       var msg = "<span class='t'>" + d3.select(this).attr("text") + "</span>";
 
+
+      // console.log($('.node'));
+
       d3.select(".node").append("foreignObject")
       .attr("class", "centralHtml")
       .attr("width", htmlBoxWidth)
       .attr("height", htmlBoxHeight)
       .attr("x", htmlBoxX)
       .attr("y",htmlBoxY)
-      .append("xhtml:body")
+      // .append("xhtml:body")  // namespace inclusion for contained html doc. is creating bug
       .style("font", "1px 'Helvetica Neue'")
       .html(msg)
       .transition()
@@ -325,10 +311,6 @@ var Bubble = {
       .duration(500)
       .delay(0);
 
-      // d3.select(this).append("text")
-      //   .attr("dx", -20)
-      //   .attr("dy", 30)
-      //   .text(function(d) { return d.contribName; } );
     });
 
     node.on("mouseleave", function() {
@@ -404,7 +386,7 @@ var Bubble = {
     });
 
 
-    // player configuration
+    // player configuration to play inside the container
     // $("#playerBox_container").css("-webkit-transform", "scale(0.4,0.4)");
     // $("#playerBox_container").css("top", height/2);
     // $("#playerBox_container").css("left", width/2);
@@ -434,7 +416,7 @@ var Bubble = {
 
     force.on("tick", function() {
 
-      /* uncomment to show links - links repositionning
+      /* uncomment to show visible links - links repositionning
       link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
