@@ -9,8 +9,15 @@
     <link rel="stylesheet" href="popup.less" type="text/less" />    
     <link rel="stylesheet" href="example.less" type="text/less" />
     <link rel="stylesheet" href="Demos/Accordion/Accordion.less" type="text/less" />
-    <link rel="stylesheet" href="Demos/Flippers_slidedown/flippers_sd.css" type="text/css" />
-    <!-- <link rel="stylesheet" href="Demos/Flippers_scrollable/flippers_scroll.css" type="text/css" /> -->
+    <link rel="stylesheet" href="Demos/Flippers_slidedown/flippers.css" type="text/css" />
+    <!-- <link rel="stylesheet" href="Demos/Flippers_scrollable/flippers.css" type="text/css" /> -->
+    <!-- Add for flyers -->
+    <link rel="stylesheet" type="text/css" href="Demos/Flyers/windy.css" />
+    <link rel="stylesheet" type="text/css" href="Demos/Flyers/demo.css" />
+    <link rel="stylesheet" type="text/css" href="Demos/Flyers/style1.css" />
+    <script type="text/javascript" src="Demos/Flyers/modernizr.custom.79639.js"></script>
+    <noscript><link rel="stylesheet" type="text/css" href="Demos/Flyers/noJS.css" /></noscript>
+    <!-- Add for flyers —>
 
     <!-- Script tags -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -111,8 +118,12 @@
     <script src="Demos/Accordion/fisheye_plugin.js"></script>
     <script src="Demos/Accordion/Accordion.js"></script>
     <script src="Demos/Bubbles/Bubbles.js"></script>
-    <script src="Demos/Flippers_slidedown/flippers_sd.js"></script>
-    <!-- // <script src="Demos/Flippers_scrollable/flippers_scroll.js"></script> -->
+    <script src="Demos/Flippers_slidedown/flippers.js"></script>
+    <!-- // <script src="Demos/Flippers_scrollable/flippers.js"></script> -->
+    <!-- Need to add for flyers -->
+    <script type="text/javascript" src="Demos/Flyers/windy.js"></script>
+    <script src="Demos/Flyers/flyers.js"></script>
+    <!-- Need to add for flyers -->
     <script src="example.js"></script>
     
     <script type="text/javascript" charset="utf-8" src="//vg-qaassets.s3.amazonaws.com/static/global/js/less-1.4.1.min.js"></script>
@@ -133,6 +144,7 @@
             Bubble.init($('#bubbleDiv'));
             Flippers_sd.init($('#flippersSdDiv'));
             // Flippers_scroll.init($('#flippersScrollDiv'));
+            Flyers.init($('#flyersDiv'));
             // Example.init($(".gallery"));
         });
     </script>
@@ -156,6 +168,9 @@
     <div id="flippersScrollDiv" class="flippersSc" style="width:100%">
     </div>
 
+    <h1> Flyers </h1>
+    <div id="flyersDiv" class="flyers" style="width:100%">
+    </div>
 
 
     <div class="gallery">
