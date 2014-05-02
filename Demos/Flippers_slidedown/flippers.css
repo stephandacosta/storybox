@@ -1,0 +1,110 @@
+#thumbsWrapper{
+  background-color: black;
+  position: relative;
+  width:100%;
+  height:100px;
+  overflow-y:hidden;
+  top:0;
+  left:0;
+  border-top:2px solid #000;
+}
+
+
+#thumbsContainer{
+    width: 100%;
+    height:98px;
+    display:block;
+    margin: 0;
+}
+
+
+.cardcontainer {
+  height:75px;
+  /*width: 100px;*/
+  display:block;
+  /*margin: 2px;*/
+  cursor:pointer;
+  /*opacity:0.4;*/
+  /*float: left;*/
+  position: absolute;
+/*  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=40);*/
+  border-style:solid;
+  border-color:#fff; 
+/*  width:20%;
+  height: 25%;*/
+  -webkit-perspective: 1000;
+}
+
+
+  .cardcontainer  .front {
+    width: 100%; height: 100%;
+  }
+  .cardcontainer  .back {
+/*    width: 100%; height: 100%;*/
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-backface-visibility: hidden;
+  }
+/*    .cardcontainer  .back h2 {
+      width: 287px; height: 42px; margin: 0 auto 20px auto;
+      text-indent: -9999px; 
+    }*/
+    .cardcontainer  img {
+      display:block;
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
+    }
+    .cardcontainer  div {
+/*      float: left; width: 185px; margin: 0 0 20px 0;*/
+      font-size: 17px; line-height: 28px; color: #4c4c4c; 
+    }
+
+/*    .cardcontainer {
+  width: 324px; height: 412px;
+  -webkit-perspective: 1000;
+}*/
+
+.card {
+  width: 100%; height: 100%;
+
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -transition: 0.5s;
+}
+
+
+
+
+.cardcontainer:hover .card {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.face {
+position: absolute;
+-webkit-backface-visibility: hidden;
+-moz-webkit-backface-visibility: hidden;
+backface-visibility: hidden; 
+/*need to implement option for earlier browsers*/
+}
+
+
+
+.back {
+  position:absolute;
+  background-color: lavender; 
+}
+
+/*.cardcontainer:hover .back{
+  z-index:9000;
+}*/
