@@ -43,7 +43,7 @@ var Flippers_sd = {
     var cardMargin = 2;
     var cardBorder = 8;
     var cardWidth = cardInnerWidth+2*cardMargin+2*cardBorder;
-    var thumbCount = Math.floor(window.innerWidth/cardWidth)-3;
+    var thumbCount = Math.floor(window.innerWidth/cardWidth);
 
     for (var i = 0; i<data.length ; i++){
 
@@ -108,15 +108,10 @@ var Flippers_sd = {
 
       $wrapper.scrollLeft(0);
 
-
       var mouseEnabled = true;
       //When user move mouse over menu
       $wrapper.unbind('mousemove').bind('mousemove',function(e){
         // console.log('pageX: ',e.pageX,'  scrollLeft:', $wrapper.scrollLeft(),'  %of width: ',($wrapper.scrollLeft()/$wrapper.width())); 
-          //As images are loaded ul width increases,
-          //so we recalculate it each time
-          // var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + contPadding;
-   
 
           if (e.clientX > window.innerWidth*0.75){
             if (mouseEnabled){
@@ -150,6 +145,8 @@ var Flippers_sd = {
   var slideRight = function(cardWidth){
 
     if ($('.hiddenleft').size() > 0 ){
+      //hide 3 cards out
+      $( ".cardcontainer" ).not('.hiddenright').filter(":visible").last().addClass('hiddenright').slideUp(200);
       //move visible cards right
       $( ".cardcontainer" ).filter(":visible").animate({
         left: "+=120"
@@ -157,8 +154,6 @@ var Flippers_sd = {
         duration: 200, 
         easing: "swing"
       });
-      //hide 3 cards out
-      $( ".cardcontainer" ).not('.hiddenright').filter(":visible").last().addClass('hiddenright').slideUp(200);
       //slide 3 hidden cards down
       $('.hiddenleft').last().css('left',0).slideDown(200).removeClass('hiddenleft');
     }
