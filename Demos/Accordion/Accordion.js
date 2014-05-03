@@ -1,7 +1,7 @@
 var Accordion = {
   $container: $("body"),
   Height: 400,
-  Width : 1500,
+  Width : window.innerWidth,
   imgWidth: 300,
   imgHeight: 200,
   minImgWidth: 40,
@@ -9,6 +9,7 @@ var Accordion = {
 
   init: function($container){
     Accordion.$container = $container;
+    Accordion.$container.css('width',3000);
     Accordion.$container.append($('<ul id="accordion" style="position:relative;"></ul>'));
     sentimentHub.on('Data', Accordion.onData);
     sentimentHub.on('Done', Accordion.onDataDone);
@@ -96,7 +97,7 @@ var Accordion = {
     .click(function(){
       player.play(item);
     });
-    Accordion.imgCounter++;
+    // Accordion.imgCounter++;
 
     //create canvas
     var $canvas = $('<canvas height="' + Accordion.imgHeight + '" width="' + Accordion.imgWidth + '" style="border:1px solid black" id="canvas'+ item.id +'"/>');
