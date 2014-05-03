@@ -138,6 +138,8 @@
         });
     
         $(function(){
+
+            $('.container').height(window.innerHeight);
             player.initPopup($("#playerBox_container"));
             
             Accordion.init($('#accordionDiv'));
@@ -148,23 +150,53 @@
             // Example.init($(".gallery"));
         });
     </script>
+
+
 </head>
 <body>
+    <style type="text/css">
+      /*.container {
 
-    <!-- Accordion is rendered here -->
-    <h1> Accordion </h1>
-    <h2> (features: easy usage flow, interactive, large content volume, enticing) </h2>
-    <div id="accordionDiv" class="accordion" style="width:100%">
+      }*/
+      .titles {
+        background-color:white;
+        padding-top:20px;
+        padding-bottom:20px;
+        text-indent: 20px;
+        border-top: 3em;
+        border-color: purple;
+        border-style: solid;
+      }
+    </style>
+
+    <!-- Accordion -->
+    <div class="container" >
+      <div class="titles">
+        <h1> Accordion </h1>
+        <h2> (features: easy usage flow, interactive, large content volume, enticing) </h2>
+      </div>
+      <div id="accordionDiv" class="accordion" style="width:100%;margin-bottom:20px;">
+      </div>
     </div>
 
-    <h1> Gravity Bubbles </h1>
-    <h2> (benefits: highly interactive, mid content volume, enticing) </h2>
-    <div id="bubbleDiv" class="bubble" style="width:100%">
+    <!-- Gravity Bubbles -->
+    <div class="container" >
+      <div class="titles">
+        <h1> Gravity Bubbles </h1>
+        <h2> (benefits: highly interactive, mid content volume, enticing) </h2>
+      </div>
+      <div id="bubbleDiv" class="bubble" style="width:100%;margin-bottom:20px;">
+      </div>
     </div>
 
-    <h1> Sliding Flippers </h1>
-    <h2> (benefits: minimalist, easy usage flow, aesthetical animations, mid content volume) </h2>
-    <div id="flippersSdDiv" class="flippersSd" style="width:100%">
+    <!-- Sliding Flippers -->
+    <div class="container" >
+      <div class="titles">
+        <h1> Sliding Flippers </h1>
+        <h2> (benefits: minimalist, easy usage flow, aesthetical animations, mid content volume) </h2>
+      </div>
+      <div id="flippersSdDiv" class="flippersSd" style="width:100%;margin-bottom:20px;">
+      </div>
     </div>
 
 <!--     <h1> Flippers Scroll </h1>
@@ -172,9 +204,14 @@
     <div id="flippersScrollDiv" class="flippersSc" style="width:100%">
     </div> -->
 
-    <h1> Flyers </h1>
-    <h2> (benefits: minimalist, minimal content volume, enticing) </h2>
-    <div id="flyersDiv" class="flyers" style="width:100%">
+    <!-- Sliding Flippers -->
+    <div class="container" >
+      <div class="titles">
+        <h1> Flyers </h1>
+        <h2> (benefits: minimalist, minimal content volume, enticing) </h2>
+      </div>
+      <div id="flyersDiv" class="flyers" style="width:100%;margin-bottom:20px;">
+      </div>
     </div>
 
 
